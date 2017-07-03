@@ -1,0 +1,25 @@
+{
+  "name": "core-canvas-image-helper",
+  "version": "0.0.2",
+  "description": "a pure JS lib to handle image via canvas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JackPu/core-canvas-image-helper.git"
+  },
+  "keywords": [
+    "image",
+    "canvas",
+    "rotate",
+    "compress"
+  ],
+  "author": "Jack Pu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JackPu/core-canvas-image-helper/issues"
+  },
+  "homepage": "https://github.com/JackPu/core-canvas-image-helper#readme"
+}
