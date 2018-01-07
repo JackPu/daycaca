@@ -1,10 +1,11 @@
 {
   "name": "core-canvas-image-helper",
-  "version": "0.0.3",
-  "description": "a pure JS lib to handle image via canvas",
-  "main": "index.js",
+  "version": "0.1.0",
+  "description": "a pure JavaScript lib to handle image via canvas",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --config ./build/webpack.config.js",
+    "test": "karma start ./test/karma.conf.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,15 @@
   "bugs": {
     "url": "https://github.com/JackPu/core-canvas-image-helper/issues"
   },
-  "homepage": "https://github.com/JackPu/core-canvas-image-helper#readme"
+  "homepage": "https://github.com/JackPu/core-canvas-image-helper#readme",
+  "devDependencies": {
+    "eslint": "^4.15.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.1",
+    "karma-jasmine": "^1.1.1",
+    "webpack": "^3.10.0"
+  }
 }

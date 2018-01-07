@@ -1,8 +1,8 @@
 # core-canvas-image-helper
-a pure JS library to handle image via canvas
+A pure JavaScript library to handle image via canvas.
 
 
-### How to use
+## How to use
 
 ``` bash
 npm install core-canvas-image-helper -save
@@ -18,7 +18,7 @@ canvasHelper.rotate(src, degress, (data, w, h) => {
 
 ```
 
-### API
+## API
 
 + compress
 

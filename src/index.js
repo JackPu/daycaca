@@ -1,68 +1,66 @@
-// a canvas lib to compress and crop image
+// a canvas lib to compress or crop images
+
+const isNumber = num => (typeof num === 'number');
+
 export default {
   _getImageType(str) {
     let mimeType = 'image/jpeg';
     const outputType = str.match(/(image\/[\w]+)\.*/)[0];
-    if (typeof outputType !== 'undefined'){
+    if (typeof outputType !== 'undefined') {
       mimeType = outputType;
     }
     return mimeType;
   },
 
-  compress (src, quality, callback) {
+  compress(src, quality, callback) {
     const reader = new FileReader();
     const self = this;
-    reader.onload = function(event) {
+    reader.onload = (event) => {
       const image = new Image();
       image.src = event.target.result;
-      image.onload = function() {
+      image.onload = () => {
         const mimeType = self._getImageType(src.type);
         const cvs = self._getCanvas(image.naturalWidth, image.naturalHeight);
-        const ctx = cvs.getContext("2d").drawImage(image, 0, 0);
-        const newImageData = cvs.toDataURL(mimeType, quality/100);
+        const newImageData = cvs.toDataURL(mimeType, quality / 100);
         callback(newImageData);
-      }
+      };
     };
     reader.readAsDataURL(src);
   },
+
   /**
   * crop image via canvas and generate data
-  **/
+  */
   crop(image, options, callback) {
-    const checkNumber = function(num) {
-      return (typeof num === 'number');
-    };
     // check crop options
-    if (checkNumber(options.toCropImgX) &&
-        checkNumber(options.toCropImgY) &&
+    if (isNumber(options.toCropImgX) &&
+        isNumber(options.toCropImgY) &&
         options.toCropImgW > 0 &&
         options.toCropImgH > 0) {
       let w = options.toCropImgW;
       let h = options.toCropImgH;
-      if(options.maxWidth && options.maxWidth < w) {
+      if (options.maxWidth && options.maxWidth < w) {
         w = options.maxWidth;
-        h = options.toCropImgH * w / options.toCropImgW;
+        h = (options.toCropImgH * w) / options.toCropImgW;
       }
       if (options.maxHeight && options.maxHeight < h) {
-        h = options.maxHeight
+        h = options.maxHeight;
       }
-      const cvs = this._getCanvas(w, h);
-      const ctx = cvs.getContext('2d').drawImage(image, options.toCropImgX, options.toCropImgY, options.toCropImgW, options.toCropImgH, 0 , 0, w, h);
+      const cvs = this.__getCanvas(w, h);
       const mimeType = this._getImageType(image.src);
-      const data = cvs.toDataURL(mimeType, options.compress/100);
+      const data = cvs.toDataURL(mimeType, options.compress / 100);
       callback(data);
     }
   },
 
   resize(image, options, callback) {
-    const checkNumber = function(num) {
-      return (typeof num === 'number');
-    };
-    if(checkNumber(options.toCropImgX) && checkNumber(options.toCropImgY) && options.toCropImgW > 0 && options.toCropImgH > 0) {
-      let w = options.toCropImgW  * options.imgChangeRatio;
-      let h = options.toCropImgH * options.imgChangeRatio;
+    if (isNumber(options.toCropImgX) &&
+        isNumber(options.toCropImgY) &&
+        options.toCropImgW > 0 &&
+        options.toCropImgH > 0) {
+      const w = options.toCropImgW * options.imgChangeRatio;
+      const h = options.toCropImgH * options.imgChangeRatio;
       const cvs = this._getCanvas(w, h);
-      const ctx = cvs.getContext('2d').drawImage(image, 0, 0, options.toCropImgW, options.toCropImgH, 0 , 0, w , h);
       const mimeType = this._getImageType(image.src);
       const data = cvs.toDataURL(mimeType, options.compress / 100);
       callback(data);
@@ -87,16 +85,16 @@ export default {
       }
       if ((degrees % 180) !== 0) {
         if (degrees === -90 || degrees === 270) {
-          x = -w + canvasWidth / 2;
+          x = (canvasWidth / 2) - w;
         } else {
-          y = canvasWidth/2 - h;
+          y = (canvasWidth / 2) - h;
         }
         const c = w;
         w = h;
         h = c;
       } else {
-        x = canvasWidth/2 - w;
-        y = canvasWidth/2 - h;
+        x = (canvasWidth / 2) - w;
+        y = (canvasWidth / 2) - h;
       }
       ctx.drawImage(image, x, y);
       const cvs2 = this._getCanvas(w, h);
@@ -113,11 +111,8 @@ export default {
   _loadImage(data, callback) {
     const image = new Image();
     image.src = data;
-    image.onload = function () {
+    image.onload = () => {
       callback(image);
-    };
-    image.onerror = function () {
-      console.log('Error: image error!');
     };
   },
 
