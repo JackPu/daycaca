@@ -31,7 +31,7 @@ daycaca.rotate(src, degress, (data, w, h) => {
 ### CDN
 
 ``` js
-<script src=./dist/index.js"></sciprt>
+<script src=./dist/index.js"></script>
 
 <script>
   // src specify an image src (url or base64)
