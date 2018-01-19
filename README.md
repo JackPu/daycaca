@@ -1,6 +1,6 @@
 # daycaca
 
-[![Build Status](https://travis-ci.org/JackPu/core-canvas-image-helper.svg?branch=master)](https://travis-ci.org/JackPu/core-canvas-image-helper)
+[![Build Status](https://travis-ci.org/JackPu/daycaca.svg?branch=master)](https://travis-ci.org/JackPu/daycaca)
 [![npm](https://img.shields.io/npm/v/daycaca.svg?maxAge=2592000)]()
 
 
