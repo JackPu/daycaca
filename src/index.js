@@ -3,6 +3,22 @@
 const isNumber = num => (typeof num === 'number');
 
 export default {
+
+  /**
+  * init image for reset size and rotation
+  */
+  init(src, callback) {
+    const image = this._createImage(src);
+    image.onload = () => {
+      const mimeType = this._getImageType(image.src);
+      const cvs = this._getCanvas(image.naturalWidth, image.naturalHeight);
+      const ctx = cvs.getContext('2d');
+      ctx.drawImage(image, 0, 0);
+      const newImageData = cvs.toDataURL(mimeType, 100);
+      callback(newImageData);
+    };
+  },
+
   _getImageType(str) {
     let mimeType = 'image/jpeg';
     const outputType = str.match(/(image\/[\w]+)\.*/)[0];
@@ -46,7 +62,7 @@ export default {
       if (options.maxHeight && options.maxHeight < h) {
         h = options.maxHeight;
       }
-      const cvs = this.__getCanvas(w, h);
+      const cvs = this._getCanvas(w, h);
       const mimeType = this._getImageType(image.src);
       const data = cvs.toDataURL(mimeType, options.compress / 100);
       callback(data);
@@ -109,8 +125,7 @@ export default {
   },
 
   _loadImage(data, callback) {
-    const image = new Image();
-    image.src = data;
+    const image = this._createImage(data);
     image.onload = () => {
       callback(image);
     };
@@ -121,6 +136,12 @@ export default {
     canvas.width = width;
     canvas.height = height;
     return canvas;
+  },
+
+  _createImage(src) {
+    const image = new Image();
+    image.src = src;
+    return image;
   },
 
 };

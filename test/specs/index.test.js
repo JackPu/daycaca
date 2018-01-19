@@ -10,5 +10,10 @@ describe('daycaca tests', () => {
         expect(canvas.width).to.equal(100);
     });
 
+    it('#_createImage()', () => {
+        const i = daycaca._createImage('http://img1.vued.vanthink.cn/vuede7738ce4bcff0e00874b3566ef518783.png');
+        expect(i.tagName).to.equal('IMG');
+    })
+
 });
 

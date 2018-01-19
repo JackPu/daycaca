@@ -1,6 +1,6 @@
 {
   "name": "daycaca",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "a pure JavaScript lib to handle image via canvas",
   "main": "dist/index.js",
   "scripts": {
