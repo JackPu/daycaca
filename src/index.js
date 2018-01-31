@@ -19,7 +19,7 @@ module.exports = {
   },
 
   /**
-   * 将图片转换成 base64 数据
+   * encode image to base64
    * @param {Element|String} el
    * @param {Function} callback
    */
@@ -28,15 +28,12 @@ module.exports = {
     return this.init(src, callback);
   },
 
-  _getImageType(str) {
-    let mimeType = 'image/jpeg';
-    const outputType = str.match(/(image\/[\w]+)\.*/)[0];
-    if (typeof outputType !== 'undefined') {
-      mimeType = outputType;
-    }
-    return mimeType;
-  },
-
+  /**
+   * compress image
+   * @param {el|String} src the source of image
+   * @param {Number} the quality of image ( 100 = the highest quality)
+   * @param {Function} callback
+   */
   compress(src, quality, callback) {
     const reader = new FileReader();
     const self = this;
@@ -91,7 +88,10 @@ module.exports = {
       callback(data);
     }
   },
-
+  
+  /**
+   * rotate image
+   */
   rotate(src, degrees, callback) {
     this._loadImage(src, (image) => {
       let w = image.naturalWidth;
@@ -163,6 +163,15 @@ module.exports = {
       src = imgSrc;
     }
     return src;
+  },
+  
+  _getImageType(str) {
+    let mimeType = 'image/jpeg';
+    const outputType = str.match(/(image\/[\w]+)\.*/)[0];
+    if (typeof outputType !== 'undefined') {
+      mimeType = outputType;
+    }
+    return mimeType;
   },
 
 };
