@@ -1,6 +1,6 @@
 # daycaca
 
-[![Build Status](https://travis-ci.org/JackPu/daycaca.svg?branch=master)](https://travis-ci.org/JackPu/daycaca)
+[![CircleCI](https://circleci.com/gh/JackPu/daycaca/tree/dev.svg?style=svg)](https://circleci.com/gh/JackPu/daycaca/tree/dev)
 [![npm](https://img.shields.io/npm/v/daycaca.svg?maxAge=2592000)]()
 
 
@@ -75,15 +75,39 @@ daycaca.base64(img, (data) => {
 `quality` 表示图片压缩的质量，值越大，图片会清晰
 
 
+``` js
+const img = document.querySelector('img')
+daycaca.compress(img, 0.5,(data) => {
+  //... handle base64
+})
+```
 
 ### crop(source, option, callback)
 
 裁剪图片，将图片裁剪至指定大小。
 
-option {} 里面需要指定的参数
+option {} 里面需要指定的参数:
 
-+ 
++ toCropImgX: 裁剪的区域距离图片的左边缘的距离
++ toCropImgY: 裁剪的区域距离图片的上边缘的距离
++ toCropImgW: 裁剪的区域的宽度
++ toCropImgH: 裁剪的区域的高度
++ ratio 缩放比例
 
+<img width="480" src="http://img1.vued.vanthink.cn/vued233e94bd60775c0999df05d17b4642a8.png" />
+
+
+``` js
+const img = document.querySelector('img')
+daycaca.reszie(img, {
+  toCropImgX: 10,
+  toCropImgY: 20,
+  toCropImgW: 100,
+  toCropImgH: 70
+},(data) => {
+  //... handle base64
+})
+```
 
 
 ### reszie(source, ratio, callback)
@@ -91,6 +115,13 @@ option {} 里面需要指定的参数
 图片缩放，将图片进行放大缩小
 
 + ratio 表示图片缩放的比例，其中 1 表示图片不进行缩放，最小值必须 **大于0**
+
+``` js
+const img = document.querySelector('img')
+daycaca.reszie(img, 0.5,(data) => {
+  //... handle base64
+})
+```
 
 
 
