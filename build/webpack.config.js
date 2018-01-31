@@ -2,12 +2,11 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-  context: path.resolve(__dirname, '../src'),
-  entry: '../src',
+  entry: path.join(__dirname, '../src'),
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'index.js',
-    libraryTarget: 'umd',
+    library: 'daycaca',
   },
   module: {
     rules: [
@@ -20,14 +19,5 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      sourceMap: false,
-      mangle: true,
-      compress: {
-        warnings: false,
-      },
-    }),
-  ],
+  plugins: [],
 };

@@ -45,6 +45,19 @@ daycaca.rotate(src, degress, (data, w, h) => {
 
 ## API
 
+### base64(el, callback)
+
+将图片转换成 base64 code 值；参数 `el` 可以为一个图片的 Dom 节点也可以是一个图片地址；
+
+``` js
+const img = document.querySelector('img')
+daycaca.base64(img, (data) => {
+  //... handle base64
+})
+```
+
+
+
 + compress
 
 + crop

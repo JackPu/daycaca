@@ -2,7 +2,7 @@
 
 const isNumber = num => (typeof num === 'number');
 
-export default {
+module.exports = {
 
   /**
   * init image for reset size and rotation
@@ -10,13 +10,22 @@ export default {
   init(src, callback) {
     const image = this._createImage(src);
     image.onload = () => {
-      const mimeType = this._getImageType(image.src);
       const cvs = this._getCanvas(image.naturalWidth, image.naturalHeight);
       const ctx = cvs.getContext('2d');
       ctx.drawImage(image, 0, 0);
-      const newImageData = cvs.toDataURL(mimeType, 100);
+      const newImageData = cvs.toDataURL();
       callback(newImageData);
     };
+  },
+
+  /**
+   * 将图片转换成 base64 数据
+   * @param {Element|String} el
+   * @param {Function} callback
+   */
+  base64(el, callback) {
+    const src = this._getElSrc(el);
+    return this.init(src, callback);
   },
 
   _getImageType(str) {
@@ -142,6 +151,18 @@ export default {
     const image = new Image();
     image.src = src;
     return image;
+  },
+
+  _getElSrc(el) {
+    let src = el;
+    if (typeof el === 'object' && el.tagName === 'IMG') {
+      const imgSrc = el.src;
+      if (!imgSrc) {
+        return console.error('Element must hava src');
+      }
+      src = imgSrc;
+    }
+    return src;
   },
 
 };
