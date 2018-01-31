@@ -1,21 +1,21 @@
 # daycaca
 
 [![CircleCI](https://circleci.com/gh/JackPu/daycaca/tree/dev.svg?style=svg)](https://circleci.com/gh/JackPu/daycaca/tree/dev)
-[![npm](https://img.shields.io/npm/v/daycaca.svg?maxAge=2592000)]()
+[![npm](https://img.shields.io/npm/v/daycaca.svg?maxAge=2592000)](https://www.npmjs.com/package/daycaca)
 
 
 <img src="http://img1.vued.vanthink.cn/vuede494856de5f2390a5727a6d98d488305.png" width="400">
 
-A pure JavaScript library to handle image source via canvas.
+一款基于 canvas 图片处理类库，它可以帮助你处理图片的压缩，裁剪等；
 
 [中文文档](./README.zh.md) | [English](./README.md) | [日本語](./README.jp.md)
 
 [examples](http://events.jackpu.com/daycaca/)
 
 
-## How to use
+##  快速开始
 
-### Npm
+### npm
 
 ``` bash
 $  npm install daycaca -save
@@ -32,7 +32,7 @@ daycaca.rotate(src, degress, (data, w, h) => {
 
 ```
 
-### CDN
+### 直接在浏览器使用
 
 ``` js
 <script src="./dist/index.js"></script>
@@ -49,15 +49,15 @@ daycaca.rotate(src, degress, (data, w, h) => {
 
 ## API
 
-All API methods's argument `source` should be one type below:
+所有 api 中的 `source` 它可以是;
 
-+ an image url  (Pay attention to [CORS](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) settings)
-+ an IMG elment
-+ [a file object](https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications) Which use `input[type="file"]` value as source
++ 图片 url 地址 (如果使用 url 注意对于 [跨域](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) 的设置)
++ 图片的 DOM 节点 
++ 一个图片的 [文件对象](https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications) 使用 `input[type="file"]` 读取的对象值
 
 ### base64(source, callback)
 
-Convert your image to base64.
+将图片转换成 base64 code 值；参数 `el` 可以为一个图片的 Dom 节点也可以是一个图片地址；
 
 ``` js
 const img = document.querySelector('img')
@@ -68,13 +68,13 @@ daycaca.base64(img, (data) => {
 
 ### compress(source, quailty, callback)
 
-Compress your image and minify the size of your image.
+压缩图片，会将图片进行质量上的压缩, 从而降低图片的大小。
 
-+ PNG need lossless compression; So the param `quality` may not work.
++ PNG 走的无损压缩，类库参考 .因此 `quailty` 无效
 
-+ JPG/JPEG/BMP need lossy compression;
++ JPG/JPEG/BMP 等位图走的有损压缩
 
-`quality` (1~100). 100 means that the image keeps the same quality.
+`quality` 表示图片压缩的质量，值越大，图片会清晰
 
 
 ``` js
@@ -86,15 +86,15 @@ daycaca.compress(img, 0.5,(data) => {
 
 ### crop(source, option, callback)
 
-Crop your image to the size which you specify.
+裁剪图片，将图片裁剪至指定大小。
 
-option {} :
+option {} 里面需要指定的参数:
 
-+ toCropImgX: The x-axis distance between the crop area and the image;
-+ toCropImgY: The y-axis distance between the crop area and the image;
-+ toCropImgW: The width of crop area;
-+ toCropImgH: The height of crop area
-+ ratio: the scale ration of the image
++ toCropImgX: 裁剪的区域距离图片的左边缘的距离
++ toCropImgY: 裁剪的区域距离图片的上边缘的距离
++ toCropImgW: 裁剪的区域的宽度
++ toCropImgH: 裁剪的区域的高度
++ ratio 缩放比例
 
 <img width="480" src="http://img1.vued.vanthink.cn/vued233e94bd60775c0999df05d17b4642a8.png" />
 
@@ -111,9 +111,10 @@ daycaca.reszie(img, {
 })
 ```
 
+
 ### rotate(source, degree, callback)
 
-Rotate your image to any degree.
+旋转图片至某个角度。
 
 ``` js
 const img = document.querySelector('img')
@@ -125,8 +126,9 @@ daycaca.rotate(img, 90,(data) => {
 
 ### reszie(source, ratio, callback)
 
-Scale the image;
-+ ratio (0~1): the scale ratio of the image. 1 means the image keep the same size;
+图片缩放，将图片进行放大缩小
+
++ ratio 表示图片缩放的比例，其中 1 表示图片不进行缩放，最小值必须 **大于0**
 
 ``` js
 const img = document.querySelector('img')
@@ -135,12 +137,12 @@ daycaca.reszie(img, 0.5,(data) => {
 })
 ```
 
-## Contributions
+## 贡献
 
-Your contributions and suggestions are welcome 😄😄🌺🌺🎆🎆
+欢迎您提出自己的代码 PR 以及任何建议 😄😄🌺🌺🎆🎆
+
 
 ## MIT License
-
 
 
 

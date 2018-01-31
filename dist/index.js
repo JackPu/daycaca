@@ -1,1 +1,363 @@
-!function(t,e){if("object"==typeof exports&&"object"==typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var a=e();for(var r in a)("object"==typeof exports?exports:t)[r]=a[r]}}("undefined"!=typeof self?self:this,function(){return function(t){function e(r){if(a[r])return a[r].exports;var o=a[r]={i:r,l:!1,exports:{}};return t[r].call(o.exports,o,o.exports,e),o.l=!0,o.exports}var a={};return e.m=t,e.c=a,e.d=function(t,a,r){e.o(t,a)||Object.defineProperty(t,a,{configurable:!1,enumerable:!0,get:r})},e.n=function(t){var a=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(a,"a",a),a},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="",e(e.s=0)}([function(t,e,a){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(t){return"number"==typeof t};e.default={init:function(t,e){var a=this,r=this._createImage(t);r.onload=function(){var t=a._getImageType(r.src),o=a._getCanvas(r.naturalWidth,r.naturalHeight);o.getContext("2d").drawImage(r,0,0);var n=o.toDataURL(t,100);e(n)}},_getImageType:function(t){var e="image/jpeg",a=t.match(/(image\/[\w]+)\.*/)[0];return void 0!==a&&(e=a),e},compress:function(t,e,a){var r=new FileReader,o=this;r.onload=function(r){var n=new Image;n.src=r.target.result,n.onload=function(){var r=o._getImageType(t.type),i=o._getCanvas(n.naturalWidth,n.naturalHeight),g=i.toDataURL(r,e/100);a(g)}},r.readAsDataURL(t)},crop:function(t,e,a){if(r(e.toCropImgX)&&r(e.toCropImgY)&&e.toCropImgW>0&&e.toCropImgH>0){var o=e.toCropImgW,n=e.toCropImgH;e.maxWidth&&e.maxWidth<o&&(o=e.maxWidth,n=e.toCropImgH*o/e.toCropImgW),e.maxHeight&&e.maxHeight<n&&(n=e.maxHeight);var i=this._getCanvas(o,n),g=this._getImageType(t.src);a(i.toDataURL(g,e.compress/100))}},resize:function(t,e,a){if(r(e.toCropImgX)&&r(e.toCropImgY)&&e.toCropImgW>0&&e.toCropImgH>0){var o=e.toCropImgW*e.imgChangeRatio,n=e.toCropImgH*e.imgChangeRatio,i=this._getCanvas(o,n),g=this._getImageType(t.src);a(i.toDataURL(g,e.compress/100))}},rotate:function(t,e,a){var r=this;this._loadImage(t,function(o){var n=o.naturalWidth,i=o.naturalHeight,g=Math.max(n,i),u=r._getCanvas(g,g),s=u.getContext("2d");s.save(),s.translate(g/2,g/2),s.rotate(e*(Math.PI/180));var c=0,m=0;if(0===(e%=360))return a(t,n,i);if(e%180!=0){-90===e||270===e?c=g/2-n:m=g/2-i;var f=n;n=i,i=f}else c=g/2-n,m=g/2-i;s.drawImage(o,c,m),r._getCanvas(n,i).getContext("2d").drawImage(u,0,0,n,i,0,0,n,i);var p=r._getImageType(o.src),l=u.toDataURL(p,1);a(l,n,i),u=null,s=null})},_loadImage:function(t,e){var a=this._createImage(t);a.onload=function(){e(a)}},_getCanvas:function(t,e){var a=document.createElement("canvas");return a.width=t,a.height=e,a},_createImage:function(t){var e=new Image;return e.src=t,e}}}])});
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["daycaca"] = factory();
+	else
+		root["daycaca"] = factory();
+})(typeof self !== 'undefined' ? self : this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+// a canvas lib to compress or crop images
+
+var isNumber = function isNumber(num) {
+  return typeof num === 'number';
+};
+var imageReg = /\.(png|jpeg|jpg|gif|bmp)/;
+
+var defaultConfig = {
+  ratio: 1,
+  enableWebWorker: false
+};
+
+module.exports = {
+  setConfig: function setConfig(config) {
+    this._config = Object.assign(defaultConfig, config);
+  },
+
+
+  /**
+  * init image for reset size and rotation
+  */
+  init: function init(src, callback) {
+    var _this = this;
+
+    var image = this._createImage(src);
+    image.onload = function () {
+      var cvs = _this._getCanvas(image.naturalWidth, image.naturalHeight);
+      var ctx = cvs.getContext('2d');
+      ctx.drawImage(image, 0, 0);
+      var newImageData = cvs.toDataURL();
+      callback(newImageData);
+    };
+  },
+
+
+  /**
+   * encode image to base64
+   * @param {Element|String} el
+   * @param {Function} callback
+   */
+  base64: function base64(el, callback) {
+    var _getSrc = this._getSrc(el),
+        src = _getSrc.src,
+        type = _getSrc.type;
+
+    if (type === 'file') {
+      return this._readFile(src, callback);
+    }
+    return this.init(src, callback);
+  },
+
+
+  /**
+   * compress image
+   * @param {el|String} src the source of image
+   * @param {Number} the quality of image ( 100 = the highest quality)
+   * @param {Function} callback
+   */
+  compress: function compress(source, quality, callback) {
+    var _this2 = this;
+
+    var _getSrc2 = this._getSrc(source),
+        src = _getSrc2.src,
+        type = _getSrc2.type;
+
+    if (type === 'file') {
+      return this._readFile(src, function (data) {
+        _this2._compress(src, source, quality, callback);
+      });
+    }
+    this._compress(src, source, quality, callback);
+  },
+  _compress: function _compress(src, source, quality, callback) {
+    var _this3 = this;
+
+    this._loadImage(src, function (image) {
+      var mimeType = _this3._getImageType(source);
+      var cvs = _this3._getCanvas(image.naturalWidth, image.naturalHeight);
+      var ctx = cvs.getContext('2d');
+      ctx.drawImage(image, 0, 0);
+      var newImageData = cvs.toDataURL(mimeType, quality / 100);
+      callback(newImageData);
+    });
+  },
+  _readFile: function _readFile(file, callback) {
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      var data = event.target.result;
+      callback(data);
+    };
+    reader.readAsDataURL(file);
+  },
+
+
+  /**
+  * crop image via canvas and generate data
+  */
+  crop: function crop(source, options, callback) {
+    var _this4 = this;
+
+    var _getSrc3 = this._getSrc(source),
+        src = _getSrc3.src,
+        type = _getSrc3.type;
+
+    if (type === 'file') {
+      return this._readFile(src, function (data) {
+        _this4._crop(src, source, options, callback);
+      });
+    }
+    this._crop(src, source, options, callback);
+  },
+  _crop: function _crop(src, source, options, callback) {
+    var _this5 = this;
+
+    this._loadImage(src, function (image) {
+      // check crop options
+      if (isNumber(options.x) && isNumber(options.y) && options.w > 0 && options.h > 0) {
+        var w = options.w;
+        var h = options.h;
+        if (options.maxWidth && options.maxWidth < w) {
+          w = options.maxWidth;
+          h = options.h * w / options.w;
+        }
+        if (options.maxHeight && options.maxHeight < h) {
+          h = options.maxHeight;
+        }
+        var cvs = _this5._getCanvas(w, h);
+        var ctx = cvs.getContext('2d').drawImage(image, options.x, options.y, options.w, options.h, 0, 0, w, h);
+        var mimeType = _this5._getImageType(source);
+        var data = cvs.toDataURL(mimeType, options.compress / 100);
+        callback(data);
+      }
+    });
+  },
+  resize: function resize(source, ratio, callback) {
+    var _this6 = this;
+
+    var _getSrc4 = this._getSrc(source),
+        src = _getSrc4.src,
+        type = _getSrc4.type;
+
+    if (type === 'file') {
+      return this._readFile(src, function (data) {
+        _this6._resize(src, source, options, callback);
+      });
+    }
+    this._resize(src, source, options, callback);
+  },
+  _resize: function _resize(src, source, options, callback) {
+    var _this7 = this;
+
+    this._loadImage(src, function (image) {
+      if (isNumber(options.toCropImgX) && isNumber(options.toCropImgY) && options.toCropImgW > 0 && options.toCropImgH > 0) {
+        var w = options.toCropImgW * options.imgChangeRatio;
+        var h = options.toCropImgH * options.imgChangeRatio;
+        var cvs = _this7._getCanvas(w, h);
+        var ctx = cvs.getContext('2d').drawImage(image, 0, 0, options.toCropImgW, options.toCropImgH, 0, 0, w, h);
+        var mimeType = _this7._getImageType(source);
+        var data = cvs.toDataURL(mimeType, options.compress / 100);
+        callback(data);
+      }
+    });
+  },
+
+
+  /**
+   * rotate image
+   */
+  rotate: function rotate(source, degree, callback) {
+    var _this8 = this;
+
+    var _getSrc5 = this._getSrc(source),
+        src = _getSrc5.src,
+        type = _getSrc5.type;
+
+    if (type === 'file') {
+      return this._readFile(src, function (data) {
+        _this8._rotate(src, source, degree, callback);
+      });
+    }
+    if (degree % 360 === 0) {
+      return callback(src);
+    }
+    this._rotate(src, source, degree, callback);
+  },
+  _rotate: function _rotate(src, source, degree, callback) {
+    var _this9 = this;
+
+    this._loadImage(src, function (image) {
+      var w = image.naturalWidth;
+      var h = image.naturalHeight;
+      degree %= 360;
+      if (degree == 90 || degree == 270) {
+        w = image.naturalHeight;
+        h = image.naturalWidth;
+      }
+      var cvs = _this9._getCanvas(w, h);
+      var ctx = cvs.getContext('2d');
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, w, h);
+      ctx.translate(w / 2, h / 2);
+      ctx.rotate(degree * Math.PI / 180);
+      ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2);
+
+      var mimeType = _this9._getImageType(source);
+      var data = cvs.toDataURL(mimeType, 1);
+      callback(data, w, h);
+      cvs = null;
+      ctx = null;
+    });
+  },
+  _loadImage: function _loadImage(src, callback) {
+    var image = this._createImage(src);
+    image.onload = function () {
+      callback(image);
+    };
+  },
+  _getCanvas: function _getCanvas(width, height) {
+    var canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    return canvas;
+  },
+  _createImage: function _createImage(src) {
+    var image = new Image();
+    image.src = src;
+    return image;
+  },
+  _getSrc: function _getSrc(source) {
+    var src = source;
+    var type = 'url';
+    if (this._isImageElement(source)) {
+      var imgSrc = source.src;
+      if (!imgSrc) {
+        return console.error('Element must hava src');
+      }
+      src = imgSrc;
+      type = 'element';
+    } else if (this._isFileObject(source)) {
+      src = source;
+      type = 'file';
+    }
+    return {
+      src: src,
+      type: type
+    };
+  },
+  _isFileObject: function _isFileObject(file) {
+    return (typeof file === 'undefined' ? 'undefined' : _typeof(file)) === 'object' && file.type && file.size > 0;
+  },
+  _isImageElement: function _isImageElement(el) {
+    return (typeof el === 'undefined' ? 'undefined' : _typeof(el)) === 'object' && el.tagName === 'IMG';
+  },
+  _getImageType: function _getImageType(source) {
+    var _getSrc6 = this._getSrc(source),
+        src = _getSrc6.src,
+        type = _getSrc6.type;
+
+    var mimeType = 'image/jpeg';
+    if (type === 'file') {
+      var outputType = str.match(/(image\/[\w]+)\.*/)[0];
+      if (typeof outputType !== 'undefined') {
+        mimeType = outputType;
+      }
+    } else {
+      var arr = imageReg.exec(src);
+      if (arr && arr[1]) {
+        mimeType = 'image/' + arr[1];
+      }
+    }
+
+    return mimeType;
+  }
+};
+
+/***/ })
+/******/ ]);
+});

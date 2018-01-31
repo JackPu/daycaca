@@ -4,7 +4,10 @@
   "description": "a pure JavaScript lib to handle image via canvas",
   "main": "dist/index.js",
   "scripts": {
-    "build": "webpack --config ./build/webpack.config.js",
+    "build": "npm run build-browser && npm run build-umd",
+    "build-browser": "webpack --config ./build/webpack.browser.config.js",
+    "build-umd": "webpack --config ./build/webpack.build.config.js",
+    "dev": "webpack-dev-server --config ./build/webpack.dev.config.js",
     "test": "karma start ./test/karma.conf.js"
   },
   "repository": {
@@ -38,6 +41,7 @@
     "karma-jasmine": "^1.1.1",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.9",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1"
   }
 }

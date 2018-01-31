@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Daycaca-A pure JavaScript library to handle image via canvas</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1,maximum-scale=1">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta content="telephone=no" name="format-detection" />
+  <link rel="icon" type="image/png" href="./images/daycaca.logo.png" />
+  <link href="https://cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Monoton" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <div class="doc">
+    <nav class="navbar navbar-default navbar-fixed-top js-navbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            <img alt="vanspeak" width="26" src="http://img1.vued.vanthink.cn/vued9afaf2a39895dc519032c75c0cb89a98.png">
+          </a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#examples">Examples</a></li>
+          <li><a href="https://github.com/Vanthink-UED/vanspeak">Github</a></li>
+        </ul>
+        
+      </div>
+    </nav>
+    <div class="doc-hd">
+      <h1>Daycaca</h1>
+      <p>A pure JavaScript library to handle image via canvas</p>
+      <p>
+        <a href="https://github.com/JackPu/daycaca" class="btn btn-install">Install Now </a>
+      </p>
+    </div>
+    <h2 id="document">How To Use</h2>
+    <div class="doc-main contents">
+      <p>Browser</p>
+      <pre><code>&lt;script src="./dist/daycaca.min.js"&gt;&lt;/script&gt;</code></pre>
+      <p>Npm</p>
+      <pre><code>$ npm install daycaca --save</code></pre>
+      <p>In your JS File</p>
+      <pre><code>daycaca.setConfig({});</code></pre>
+      <p><a href="https://github.com/JackPu/daycaca">view more details</a></p>
+      <br/>
+
+    </div>
+    <h2>Examples</h2>
+    <div class="doc-main contents">
+      <h3 id="examples">Base64</h3>
+      <pre><code>daycaca.base64('./images/test-base64.png', () => {
+  //...
+});</code></pre>
+      <p class="form-group">
+        <button class="btn btn-primary js-base64" data-word="hello">base64</button>
+      </p>
+      <p><code id="base64-code"></code></p>
+      <h3>compress</h3>
+      <img src="./images/test-compress.jpg" class="js-compress-el"/>
+      <p>before</p>
+      <img src="" style="display:none;width:600px;height:333px;background:#eee;" class="cp js-compress-target"/>
+      <p class="cp" style="display:none;">after</p>
+      <pre><code>daycaca.base64('./images/test-compress.jpg', 10, () => {
+  //...
+});</code></pre>
+      <p class="form-group">
+        <button class="btn btn-primary js-compress">Compress</button>
+      </p>
+      <h3>Crop</h3>
+      <img src="./images/test-crop.jpg" class="js-crop-el"/>
+      <p>裁剪前</p>
+      <img src="" style="display:none;width:600px;height:333px;background:#eee;" class="cr js-crop-target"/>
+      <p class="cr" style="display:none;">裁剪后</p>
+      <pre><code>daycaca.crop('./images/test-compress.jpg', {
+  toCropImgX: 20,
+  toCropImgY: 20,
+  toCropImgW: 120,
+  toCropImgH: 60
+  }, () => {
+//...
+});</code></pre>
+      <p class="form-group">
+        <button class="btn btn-primary js-crop" >Crop</button>
+      </p>
+      <h3>Rotate</h3>
+      <img src="./images/daycaca.png" class="js-rotate-el"/>
+      <p>before</p>
+      <img src="" style="display:none;background:#eee;" class="ro js-crop-target"/>
+      <p class="ro" style="display:none;">after</p>
+      <pre><code>daycaca.rotate(el, 90, () => {
+//...
+});</code></pre>
+      <p class="form-group">
+        <button class="btn btn-primary js-rotate" >Rotate</button>
+      </p>
+      <br/>
+      <br/>
+      <!-- Go to www.addthis.com/dashboard to customize your tools -->
+      <div class="addthis_sharing_toolbox"></div>
+    </div>
+    <div class="doc-ft">
+      The Project Made ❤️ by <a href="http://me.jackpu.com/">Jack Pu</a>
+    </div>
+
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-55d88bec2ab91030" async="async"></script>
+
+  </div>
+
+  <script src="//cdn.jsdelivr.net/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  <script src='http://s1.vued.vanthink.cn/d59f937c159f/jquery-2.2.1.min.js'></script>
+  <script src='./index.js'></script>
+  <script type="text/javascript">
+    var H = $('.doc-hd').height();
+    $(function () {
+
+      $('.js-base64').on('click', function () {
+        daycaca.base64('./images/test-base64.png', function(data) {
+          $('#base64-code').text(data);
+        })
+      });
+      $('.js-compress').on('click', function () {
+        var el = document.querySelector('.js-compress-el')
+        daycaca.compress(el, 10, function(data) {
+           $('.js-compress-target').attr('src', data)               
+           $('.cp').show();              
+        });
+      });
+      $('.js-crop').on('click', function () {
+        var el = document.querySelector('.js-crop-el')
+        daycaca.crop(el, {
+          x: 100,
+          y: 100,
+          w: 600,
+          h: 300
+        }, function(data) {
+          $('.js-crop-target').attr('src', data)               
+          $('.cr').show();  
+        });
+      });
+      
+      $('.js-rotate').on('click', function () {
+        var el = document.querySelector('.js-rotate-el')
+        daycaca.rotate(el, 90, function(data) {
+          $('.js-crop-target').attr('src', data)               
+          $('.ro').show();  
+        });
+      });
+
+      // scroll
+      $(window).on('scroll', function () {
+        var ch = $(this).scrollTop();
+        if (ch >= H && !$('.js-navbar').hasClass('active')) {
+          $('.js-navbar').addClass('active');
+        }
+        if (ch < H) {
+          $('.js-navbar').removeClass('active');
+        }
+
+      })
+    })
+  </script>
+
+</body>
+
+</html>

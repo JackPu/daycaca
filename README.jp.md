@@ -6,14 +6,16 @@
 
 <img src="http://img1.vued.vanthink.cn/vuede494856de5f2390a5727a6d98d488305.png" width="400">
 
-A pure JavaScript library to handle image source via canvas.
+
+キャンバスを介して Canvas ソースを処理するための純粋な JavaScript ライブラリ。
+
 
 [中文文档](./README.zh.md) | [English](./README.md) | [日本語](./README.jp.md)
 
 [examples](http://events.jackpu.com/daycaca/)
 
 
-## How to use
+## 使い方
 
 ### Npm
 
@@ -49,7 +51,7 @@ daycaca.rotate(src, degress, (data, w, h) => {
 
 ## API
 
-All API methods's argument `source` should be one type below:
+API `source` 々は以下の1つのタイプでなければなりません:
 
 + an image url  (Pay attention to [CORS](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) settings)
 + an IMG elment
@@ -57,7 +59,7 @@ All API methods's argument `source` should be one type below:
 
 ### base64(source, callback)
 
-Convert your image to base64.
+あなたのイメージを変換する `base64`.
 
 ``` js
 const img = document.querySelector('img')
@@ -68,13 +70,13 @@ daycaca.base64(img, (data) => {
 
 ### compress(source, quailty, callback)
 
-Compress your image and minify the size of your image.
+あなたのイメージを圧縮する.
 
-+ PNG need lossless compression; So the param `quality` may not work.
++ PNG 表示可逆圧縮; `quality` うまくいかない。
 
-+ JPG/JPEG/BMP need lossy compression;
++ JPG/JPEG/BMP 表示損失圧縮;
 
-`quality` (1~100). 100 means that the image keeps the same quality.
+`quality` (1~100). 100 表示同じままにする
 
 
 ``` js
@@ -86,15 +88,15 @@ daycaca.compress(img, 0.5,(data) => {
 
 ### crop(source, option, callback)
 
-Crop your image to the size which you specify.
+画像をトリミングする。
 
 option {} :
 
-+ toCropImgX: The x-axis distance between the crop area and the image;
-+ toCropImgY: The y-axis distance between the crop area and the image;
-+ toCropImgW: The width of crop area;
-+ toCropImgH: The height of crop area
-+ ratio: the scale ration of the image
++ toCropImgX;
++ toCropImgY;
++ toCropImgW;
++ toCropImgH;
++ ratio: スケール比;
 
 <img width="480" src="http://img1.vued.vanthink.cn/vued233e94bd60775c0999df05d17b4642a8.png" />
 
@@ -113,7 +115,7 @@ daycaca.reszie(img, {
 
 ### rotate(source, degree, callback)
 
-Rotate your image to any degree.
+あなたのイメージを回転させる。
 
 ``` js
 const img = document.querySelector('img')
@@ -122,11 +124,11 @@ daycaca.rotate(img, 90,(data) => {
 })
 ```
 
-
 ### reszie(source, ratio, callback)
 
-Scale the image;
-+ ratio (0~1): the scale ratio of the image. 1 means the image keep the same size;
+画像を拡大縮小する;
+
++ ratio (0~1): 画像のスケール比; 1 表示同じままにする
 
 ``` js
 const img = document.querySelector('img')
@@ -135,9 +137,9 @@ daycaca.reszie(img, 0.5,(data) => {
 })
 ```
 
-## Contributions
+## 貢献
 
-Your contributions and suggestions are welcome 😄😄🌺🌺🎆🎆
+あなたの貢献と提案は大歓迎です 😄😄🌺🌺🎆🎆
 
 ## MIT License
 

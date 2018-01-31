@@ -15,5 +15,13 @@ describe('daycaca tests', () => {
         expect(i.tagName).to.equal('IMG');
     })
 
+    it('#base64()', (done) => {
+        const src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAFElEQVQYV2P8+bbpPwMDAwMjjAEAS2AG0Z9vsksAAAAASUVORK5CYII=';
+        daycaca.base64(src, (data) => {
+            expect(/data:image\/png;base64/.test(data)).to.equal(true)
+            done()
+        })
+    })
+
 });
 
