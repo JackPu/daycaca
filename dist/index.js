@@ -87,8 +87,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 var isNumber = function isNumber(num) {
   return typeof num === 'number';
 };
+var imageReg = /\.(png|jpeg|jpg|gif|bmp)/;
+
+var defaultConfig = {
+  ratio: 1,
+  enableWebWorker: false
+};
 
 module.exports = {
+  setConfig: function setConfig(config) {
+    this._config = Object.assign(defaultConfig, config);
+  },
+
 
   /**
   * init image for reset size and rotation
@@ -108,114 +118,184 @@ module.exports = {
 
 
   /**
-   * 将图片转换成 base64 数据
+   * encode image to base64
    * @param {Element|String} el
    * @param {Function} callback
    */
   base64: function base64(el, callback) {
-    var src = this._getElSrc(el);
+    var _getSrc = this._getSrc(el),
+        src = _getSrc.src,
+        type = _getSrc.type;
+
+    if (type === 'file') {
+      return this._readFile(src, callback);
+    }
     return this.init(src, callback);
   },
-  _getImageType: function _getImageType(str) {
-    var mimeType = 'image/jpeg';
-    var outputType = str.match(/(image\/[\w]+)\.*/)[0];
-    if (typeof outputType !== 'undefined') {
-      mimeType = outputType;
+
+
+  /**
+   * compress image
+   * @param {el|String} src the source of image
+   * @param {Number} the quality of image ( 100 = the highest quality)
+   * @param {Function} callback
+   */
+  compress: function compress(source, quality, callback) {
+    var _this2 = this;
+
+    var _getSrc2 = this._getSrc(source),
+        src = _getSrc2.src,
+        type = _getSrc2.type;
+
+    if (type === 'file') {
+      return this._readFile(src, function (data) {
+        _this2._compress(src, source, quality, callback);
+      });
     }
-    return mimeType;
+    this._compress(src, source, quality, callback);
   },
-  compress: function compress(src, quality, callback) {
+  _compress: function _compress(src, source, quality, callback) {
+    var _this3 = this;
+
+    this._loadImage(src, function (image) {
+      var mimeType = _this3._getImageType(source);
+      var cvs = _this3._getCanvas(image.naturalWidth, image.naturalHeight);
+      var ctx = cvs.getContext('2d');
+      ctx.drawImage(image, 0, 0);
+      var newImageData = cvs.toDataURL(mimeType, quality / 100);
+      callback(newImageData);
+    });
+  },
+  _readFile: function _readFile(file, callback) {
     var reader = new FileReader();
-    var self = this;
     reader.onload = function (event) {
-      var image = new Image();
-      image.src = event.target.result;
-      image.onload = function () {
-        var mimeType = self._getImageType(src.type);
-        var cvs = self._getCanvas(image.naturalWidth, image.naturalHeight);
-        var newImageData = cvs.toDataURL(mimeType, quality / 100);
-        callback(newImageData);
-      };
+      var data = event.target.result;
+      callback(data);
     };
-    reader.readAsDataURL(src);
+    reader.readAsDataURL(file);
   },
 
 
   /**
   * crop image via canvas and generate data
   */
-  crop: function crop(image, options, callback) {
-    // check crop options
-    if (isNumber(options.toCropImgX) && isNumber(options.toCropImgY) && options.toCropImgW > 0 && options.toCropImgH > 0) {
-      var w = options.toCropImgW;
-      var h = options.toCropImgH;
-      if (options.maxWidth && options.maxWidth < w) {
-        w = options.maxWidth;
-        h = options.toCropImgH * w / options.toCropImgW;
-      }
-      if (options.maxHeight && options.maxHeight < h) {
-        h = options.maxHeight;
-      }
-      var cvs = this._getCanvas(w, h);
-      var mimeType = this._getImageType(image.src);
-      var data = cvs.toDataURL(mimeType, options.compress / 100);
-      callback(data);
+  crop: function crop(source, options, callback) {
+    var _this4 = this;
+
+    var _getSrc3 = this._getSrc(source),
+        src = _getSrc3.src,
+        type = _getSrc3.type;
+
+    if (type === 'file') {
+      return this._readFile(src, function (data) {
+        _this4._crop(src, source, options, callback);
+      });
     }
+    this._crop(src, source, options, callback);
   },
-  resize: function resize(image, options, callback) {
-    if (isNumber(options.toCropImgX) && isNumber(options.toCropImgY) && options.toCropImgW > 0 && options.toCropImgH > 0) {
-      var w = options.toCropImgW * options.imgChangeRatio;
-      var h = options.toCropImgH * options.imgChangeRatio;
-      var cvs = this._getCanvas(w, h);
-      var mimeType = this._getImageType(image.src);
-      var data = cvs.toDataURL(mimeType, options.compress / 100);
-      callback(data);
+  _crop: function _crop(src, source, options, callback) {
+    var _this5 = this;
+
+    this._loadImage(src, function (image) {
+      // check crop options
+      if (isNumber(options.x) && isNumber(options.y) && options.w > 0 && options.h > 0) {
+        var w = options.w;
+        var h = options.h;
+        if (options.maxWidth && options.maxWidth < w) {
+          w = options.maxWidth;
+          h = options.h * w / options.w;
+        }
+        if (options.maxHeight && options.maxHeight < h) {
+          h = options.maxHeight;
+        }
+        var cvs = _this5._getCanvas(w, h);
+        var ctx = cvs.getContext('2d').drawImage(image, options.x, options.y, options.w, options.h, 0, 0, w, h);
+        var mimeType = _this5._getImageType(source);
+        var data = cvs.toDataURL(mimeType, options.compress / 100);
+        callback(data);
+      }
+    });
+  },
+  resize: function resize(source, ratio, callback) {
+    var _this6 = this;
+
+    var _getSrc4 = this._getSrc(source),
+        src = _getSrc4.src,
+        type = _getSrc4.type;
+
+    if (type === 'file') {
+      return this._readFile(src, function (data) {
+        _this6._resize(src, source, options, callback);
+      });
     }
+    this._resize(src, source, options, callback);
   },
-  rotate: function rotate(src, degrees, callback) {
-    var _this2 = this;
+  _resize: function _resize(src, source, options, callback) {
+    var _this7 = this;
+
+    this._loadImage(src, function (image) {
+      if (isNumber(options.toCropImgX) && isNumber(options.toCropImgY) && options.toCropImgW > 0 && options.toCropImgH > 0) {
+        var w = options.toCropImgW * options.imgChangeRatio;
+        var h = options.toCropImgH * options.imgChangeRatio;
+        var cvs = _this7._getCanvas(w, h);
+        var ctx = cvs.getContext('2d').drawImage(image, 0, 0, options.toCropImgW, options.toCropImgH, 0, 0, w, h);
+        var mimeType = _this7._getImageType(source);
+        var data = cvs.toDataURL(mimeType, options.compress / 100);
+        callback(data);
+      }
+    });
+  },
+
+
+  /**
+   * rotate image
+   */
+  rotate: function rotate(source, degree, callback) {
+    var _this8 = this;
+
+    var _getSrc5 = this._getSrc(source),
+        src = _getSrc5.src,
+        type = _getSrc5.type;
+
+    if (type === 'file') {
+      return this._readFile(src, function (data) {
+        _this8._rotate(src, source, degree, callback);
+      });
+    }
+    if (degree % 360 === 0) {
+      return callback(src);
+    }
+    this._rotate(src, source, degree, callback);
+  },
+  _rotate: function _rotate(src, source, degree, callback) {
+    var _this9 = this;
 
     this._loadImage(src, function (image) {
       var w = image.naturalWidth;
       var h = image.naturalHeight;
-      var canvasWidth = Math.max(w, h);
-      var cvs = _this2._getCanvas(canvasWidth, canvasWidth);
+      degree %= 360;
+      if (degree == 90 || degree == 270) {
+        w = image.naturalHeight;
+        h = image.naturalWidth;
+      }
+      var cvs = _this9._getCanvas(w, h);
       var ctx = cvs.getContext('2d');
-      ctx.save();
-      ctx.translate(canvasWidth / 2, canvasWidth / 2);
-      ctx.rotate(degrees * (Math.PI / 180));
-      var x = 0;
-      var y = 0;
-      degrees %= 360;
-      if (degrees === 0) {
-        return callback(src, w, h);
-      }
-      if (degrees % 180 !== 0) {
-        if (degrees === -90 || degrees === 270) {
-          x = canvasWidth / 2 - w;
-        } else {
-          y = canvasWidth / 2 - h;
-        }
-        var c = w;
-        w = h;
-        h = c;
-      } else {
-        x = canvasWidth / 2 - w;
-        y = canvasWidth / 2 - h;
-      }
-      ctx.drawImage(image, x, y);
-      var cvs2 = _this2._getCanvas(w, h);
-      var ctx2 = cvs2.getContext('2d');
-      ctx2.drawImage(cvs, 0, 0, w, h, 0, 0, w, h);
-      var mimeType = _this2._getImageType(image.src);
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, w, h);
+      ctx.translate(w / 2, h / 2);
+      ctx.rotate(degree * Math.PI / 180);
+      ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2);
+
+      var mimeType = _this9._getImageType(source);
       var data = cvs.toDataURL(mimeType, 1);
       callback(data, w, h);
       cvs = null;
       ctx = null;
     });
   },
-  _loadImage: function _loadImage(data, callback) {
-    var image = this._createImage(data);
+  _loadImage: function _loadImage(src, callback) {
+    var image = this._createImage(src);
     image.onload = function () {
       callback(image);
     };
@@ -231,16 +311,50 @@ module.exports = {
     image.src = src;
     return image;
   },
-  _getElSrc: function _getElSrc(el) {
-    var src = el;
-    if ((typeof el === 'undefined' ? 'undefined' : _typeof(el)) === 'object' && el.tagName === 'IMG') {
-      var imgSrc = el.src;
+  _getSrc: function _getSrc(source) {
+    var src = source;
+    var type = 'url';
+    if (this._isImageElement(source)) {
+      var imgSrc = source.src;
       if (!imgSrc) {
         return console.error('Element must hava src');
       }
       src = imgSrc;
+      type = 'element';
+    } else if (this._isFileObject(source)) {
+      src = source;
+      type = 'file';
     }
-    return src;
+    return {
+      src: src,
+      type: type
+    };
+  },
+  _isFileObject: function _isFileObject(file) {
+    return (typeof file === 'undefined' ? 'undefined' : _typeof(file)) === 'object' && file.type && file.size > 0;
+  },
+  _isImageElement: function _isImageElement(el) {
+    return (typeof el === 'undefined' ? 'undefined' : _typeof(el)) === 'object' && el.tagName === 'IMG';
+  },
+  _getImageType: function _getImageType(source) {
+    var _getSrc6 = this._getSrc(source),
+        src = _getSrc6.src,
+        type = _getSrc6.type;
+
+    var mimeType = 'image/jpeg';
+    if (type === 'file') {
+      var outputType = str.match(/(image\/[\w]+)\.*/)[0];
+      if (typeof outputType !== 'undefined') {
+        mimeType = outputType;
+      }
+    } else {
+      var arr = imageReg.exec(src);
+      if (arr && arr[1]) {
+        mimeType = 'image/' + arr[1];
+      }
+    }
+
+    return mimeType;
   }
 };
 

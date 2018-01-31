@@ -111,6 +111,17 @@ daycaca.reszie(img, {
 })
 ```
 
+### rotate(source, degree, callback)
+
+Rotate your image to any degree.
+
+``` js
+const img = document.querySelector('img')
+daycaca.rotate(img, 90,(data) => {
+  //... handle base64
+})
+```
+
 
 ### reszie(source, ratio, callback)
 

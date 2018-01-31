@@ -112,6 +112,18 @@ daycaca.reszie(img, {
 ```
 
 
+### rotate(source, degree, callback)
+
+旋转图片至某个角度。
+
+``` js
+const img = document.querySelector('img')
+daycaca.rotate(img, 90,(data) => {
+  //... handle base64
+})
+```
+
+
 ### reszie(source, ratio, callback)
 
 图片缩放，将图片进行放大缩小

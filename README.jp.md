@@ -88,7 +88,7 @@ daycaca.compress(img, 0.5,(data) => {
 
 ### crop(source, option, callback)
 
-画像をトリミングする
+画像をトリミングする。
 
 option {} :
 
@@ -113,6 +113,16 @@ daycaca.reszie(img, {
 })
 ```
 
+### rotate(source, degree, callback)
+
+あなたのイメージを回転させる。
+
+``` js
+const img = document.querySelector('img')
+daycaca.rotate(img, 90,(data) => {
+  //... handle base64
+})
+```
 
 ### reszie(source, ratio, callback)
 
