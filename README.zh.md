@@ -35,7 +35,7 @@ daycaca.rotate(src, degress, (data, w, h) => {
 ### 直接在浏览器使用
 
 ``` js
-<script src="./dist/index.js"></script>
+<script src="./dist/daycaca.min.js"></script>
 
 <script>
   // src specify an image src (url or base64)
