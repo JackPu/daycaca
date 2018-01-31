@@ -6,14 +6,16 @@
 
 <img src="http://img1.vued.vanthink.cn/vuede494856de5f2390a5727a6d98d488305.png" width="400">
 
-A pure JavaScript library to handle image via canvas.
+A pure JavaScript library to handle image source via canvas.
 
-[Chinese](./README.zh.md) | [English](./README.md) | [日本語](./README.jp.md)
+[中文文档](./README.zh.md) | [English](./README.md) | [日本語](./README.jp.md)
+
+[examples](http://events.jackpu.com/daycaca/)
 
 
 ## How to use
 
-### npm
+### Npm
 
 ``` bash
 $  npm install daycaca -save
@@ -47,15 +49,15 @@ daycaca.rotate(src, degress, (data, w, h) => {
 
 ## API
 
-所有 api 中的 `source` 它可以是;
+All API methods's argument `source` should be one type below:
 
-+ 图片 url 地址 (如果使用 url 注意对于 [跨域](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) 的设置)
-+ 图片的 DOM 节点 
-+ 一个图片的 [文件对象](https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications) 使用 `input[type="file"]` 读取的对象值
++ an image url  (Pay attention to [CORS](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) settings)
++ an IMG elment
++ [a file object](https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications) Which use `input[type="file"]` value as source
 
 ### base64(source, callback)
 
-将图片转换成 base64 code 值；参数 `el` 可以为一个图片的 Dom 节点也可以是一个图片地址；
+Convert your image to base64.
 
 ``` js
 const img = document.querySelector('img')
@@ -66,13 +68,13 @@ daycaca.base64(img, (data) => {
 
 ### compress(source, quailty, callback)
 
-压缩图片，会将图片进行质量上的压缩, 从而降低图片的大小。
+Compress your image and minify the size of your image.
 
-+ PNG 走的无损压缩，类库参考 .因此 `quailty` 无效
++ PNG need lossless compression; So the param `quality` may not work.
 
-+ JPG/JPEG/BMP 等位图走的有损压缩
++ JPG/JPEG/BMP need lossy compression;
 
-`quality` 表示图片压缩的质量，值越大，图片会清晰
+`quality` (1~100). 100 means that the image keeps the same quality.
 
 
 ``` js
@@ -84,15 +86,15 @@ daycaca.compress(img, 0.5,(data) => {
 
 ### crop(source, option, callback)
 
-裁剪图片，将图片裁剪至指定大小。
+Crop your image to the size which you specify.
 
-option {} 里面需要指定的参数:
+option {} :
 
-+ toCropImgX: 裁剪的区域距离图片的左边缘的距离
-+ toCropImgY: 裁剪的区域距离图片的上边缘的距离
-+ toCropImgW: 裁剪的区域的宽度
-+ toCropImgH: 裁剪的区域的高度
-+ ratio 缩放比例
++ toCropImgX: The x-axis distance between the crop area and the image;
++ toCropImgY: The y-axis distance between the crop area and the image;
++ toCropImgW: The width of crop area;
++ toCropImgH: The height of crop area
++ ratio: the scale ration of the image
 
 <img width="480" src="http://img1.vued.vanthink.cn/vued233e94bd60775c0999df05d17b4642a8.png" />
 
@@ -112,9 +114,8 @@ daycaca.reszie(img, {
 
 ### reszie(source, ratio, callback)
 
-图片缩放，将图片进行放大缩小
-
-+ ratio 表示图片缩放的比例，其中 1 表示图片不进行缩放，最小值必须 **大于0**
+Scale the image;
++ ratio (0~1): the scale ratio of the image. 1 means the image keep the same size;
 
 ``` js
 const img = document.querySelector('img')
@@ -123,7 +124,11 @@ daycaca.reszie(img, 0.5,(data) => {
 })
 ```
 
+## Contributions
 
+Your contributions and suggestions are welcome 😄😄🌺🌺🎆🎆
+
+## MIT License
 
 
 
