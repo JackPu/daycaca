@@ -52,7 +52,7 @@ daycaca.rotate(src, degress, (data, w, h) => {
 All API methods's argument `source` should be one type below:
 
 + an image url  (Pay attention to [CORS](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) settings)
-+ an IMG elment
++ an IMG element
 + [a file object](https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications) Which use `input[type="file"]` value as source
 
 ### base64(source, callback)

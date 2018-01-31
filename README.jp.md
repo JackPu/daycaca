@@ -54,8 +54,8 @@ daycaca.rotate(src, degress, (data, w, h) => {
 API `source` 々は以下の1つのタイプでなければなりません:
 
 + an image url  (Pay attention to [CORS](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) settings)
-+ an IMG elment
-+ [a file object](https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications) Which use `input[type="file"]` value as source
++ an IMG element
++ [a file object](https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications)  `input[type="file"]` の值
 
 ### base64(source, callback)
 
