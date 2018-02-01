@@ -90,10 +90,10 @@ Crop your image to the size which you specify.
 
 option {} :
 
-+ toCropImgX: The x-axis distance between the crop area and the image;
-+ toCropImgY: The y-axis distance between the crop area and the image;
-+ toCropImgW: The width of crop area;
-+ toCropImgH: The height of crop area
++ x: The x-axis distance between the crop area and the image;
++ y: The y-axis distance between the crop area and the image;
++ w: The width of crop area;
++ h: The height of crop area
 + ratio: the scale ration of the image
 
 <img width="480" src="http://img1.vued.vanthink.cn/vued233e94bd60775c0999df05d17b4642a8.png" />
@@ -102,10 +102,10 @@ option {} :
 ``` js
 const img = document.querySelector('img')
 daycaca.reszie(img, {
-  toCropImgX: 10,
-  toCropImgY: 20,
-  toCropImgW: 100,
-  toCropImgH: 70
+  x: 10,
+  y: 20,
+  w: 100,
+  h: 70
 },(data) => {
   //... handle base64
 })
