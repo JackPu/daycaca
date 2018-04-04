@@ -149,7 +149,7 @@ module.exports = {
 
     if (type === 'file') {
       return this._readFile(src, function (data) {
-        _this2._compress(src, source, quality, callback);
+        _this2._compress(data, source, quality, callback);
       });
     }
     this._compress(src, source, quality, callback);
@@ -343,7 +343,8 @@ module.exports = {
 
     var mimeType = 'image/jpeg';
     if (type === 'file') {
-      var outputType = str.match(/(image\/[\w]+)\.*/)[0];
+      var fileType = source.type;
+      var outputType = fileType.match(/(image\/[\w]+)\.*/)[0];
       if (typeof outputType !== 'undefined') {
         mimeType = outputType;
       }
@@ -353,7 +354,6 @@ module.exports = {
         mimeType = 'image/' + arr[1];
       }
     }
-
     return mimeType;
   }
 };

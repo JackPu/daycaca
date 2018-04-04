@@ -9,7 +9,6 @@ const defaultConfig = {
 };
 
 module.exports = {
-  
   setConfig(config) {
     this._config = Object.assign(defaultConfig, config)
   },
@@ -51,12 +50,12 @@ module.exports = {
     const {src, type} = this._getSrc(source);
     if (type === 'file') {
       return this._readFile(src, (data) => {
-        this._compress(src, source, quality, callback);
+        this._compress(data, source, quality, callback);
       })
     }
     this._compress(src, source, quality, callback);
   },
-  
+
   _compress(src, source, quality, callback) {
     this._loadImage(src, (image) => {
       const mimeType = this._getImageType(source);
@@ -233,10 +232,11 @@ module.exports = {
   },
   
   _getImageType(source) {
-    const {src, type} = this._getSrc(source);
+    const { src, type } = this._getSrc(source);
     let mimeType = 'image/jpeg';
     if (type === 'file') {
-      const outputType = str.match(/(image\/[\w]+)\.*/)[0];
+      const fileType = source.type;
+      const outputType = fileType.match(/(image\/[\w]+)\.*/)[0];
       if (typeof outputType !== 'undefined') {
         mimeType = outputType;
       }
@@ -246,7 +246,6 @@ module.exports = {
         mimeType = 'image/' + arr[1]
       }
     }
-    
     return mimeType;
   },
 
