@@ -33,9 +33,16 @@ module.exports = {
    * @param {Function} callback
    */
   base64(el, callback) {
-    const {src, type} = this._getSrc(el);
+    const { src, type } = this._getSrc(el);
     if (type === 'file') {
-      return this._readFile(src, callback)
+      return this._readFile(src, callback);
+    } else if (type === 'video') {
+      const video = el;
+      const cvs = this._getCanvas(video.videoWidth, video.videoHeight);
+      const ctx = cvs.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+      const newImageData = cvs.toDataURL();
+      callback(newImageData);
     }
     return this.init(src, callback);
   },
@@ -46,8 +53,8 @@ module.exports = {
    * @param {Number} the quality of image ( 100 = the highest quality)
    * @param {Function} callback
    */
-  compress(source, quality, callback) {
-    const {src, type} = this._getSrc(source);
+  compress (source, quality, callback) {
+    const { src, type } = this._getSrc(source);
     if (type === 'file') {
       return this._readFile(src, (data) => {
         this._compress(data, source, quality, callback);
@@ -66,7 +73,7 @@ module.exports = {
       callback(newImageData);
     })
   },
-  
+
   _readFile(file, callback) {
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -74,21 +81,23 @@ module.exports = {
       callback(data)
     }
     reader.readAsDataURL(file)
-  }, 
+  },
 
   /**
   * crop image via canvas and generate data
   */
   crop(source, options, callback) {
     const {src, type} = this._getSrc(source);
+    console.log(source)
     if (type === 'file') {
+      console.log(1111)
       return this._readFile(src, (data) => {
         this._crop(src, source, options, callback);
       })
     }
     this._crop(src, source, options, callback);
   },
-  
+
   _crop(src, source, options, callback) {
     this._loadImage(src, (image) => {
       // check crop options
@@ -113,7 +122,7 @@ module.exports = {
       }
     });
   },
-  
+
   resize(source, ratio, callback) {
     const {src, type} = this._getSrc(source);
     if (type === 'file') {
@@ -140,11 +149,11 @@ module.exports = {
       }
     });
   },
-  
+
   /**
    * rotate image
    */
-  rotate(source, degree, callback) {
+  rotate (source, degree, callback) {
     const {src, type} = this._getSrc(source);
     if (type === 'file') {
       return this._readFile(src, (data) => {
@@ -156,13 +165,12 @@ module.exports = {
     }
     this._rotate(src, source, degree, callback);
   },
-  
   _rotate(src, source, degree, callback) {
     this._loadImage(src, (image) => {
       let w = image.naturalWidth;
       let h = image.naturalHeight;
       degree %= 360;
-      if(degree == 90 || degree == 270) {
+      if (degree == 90 || degree == 270) {
         w = image.naturalHeight;
         h = image.naturalWidth;
       }
@@ -173,8 +181,7 @@ module.exports = {
       ctx.fillRect(0, 0, w, h);
       ctx.translate(w / 2, h / 2);
       ctx.rotate(degree * Math.PI / 180);
-      ctx.drawImage(image, -image.naturalWidth/2, -image.naturalHeight/2);
-      
+      ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2);
       const mimeType = this._getImageType(source);
       const data = cvs.toDataURL(mimeType, 1);
       callback(data, w, h);
@@ -212,25 +219,32 @@ module.exports = {
         return console.error('Element must hava src');
       }
       src = imgSrc;
-      type = 'element'
+      type = 'element';
+    } else if (this._isVideoElement(source)) {
+      src = source;
+      type = 'video';
     } else if (this._isFileObject(source)) {
       src = source;
       type = 'file';
     }
     return {
       src,
-      type
+      type,
     };
   },
-    
+
   _isFileObject(file) {
     return (typeof file === 'object' && file.type && file.size > 0);
   },
-    
+
   _isImageElement(el) {
     return (typeof el === 'object' && el.tagName === 'IMG');
   },
-  
+
+  _isVideoElement(el) {
+    return (typeof el === 'object' && el.tagName === 'VIDEO');
+  },
+
   _getImageType(source) {
     const { src, type } = this._getSrc(source);
     let mimeType = 'image/jpeg';

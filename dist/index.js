@@ -82,6 +82,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 // a canvas lib to compress or crop images
 
 var isNumber = function isNumber(num) {
@@ -96,7 +98,7 @@ var defaultConfig = {
 
 module.exports = {
   setConfig: function setConfig(config) {
-    this._config = Object.assign(defaultConfig, config);
+    this._config = _extends(defaultConfig, config);
   },
 
 
@@ -129,6 +131,13 @@ module.exports = {
 
     if (type === 'file') {
       return this._readFile(src, callback);
+    } else if (type === 'video') {
+      var video = el;
+      var cvs = this._getCanvas(video.videoWidth, video.videoHeight);
+      var ctx = cvs.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+      var newImageData = cvs.toDataURL();
+      callback(newImageData);
     }
     return this.init(src, callback);
   },
@@ -186,7 +195,9 @@ module.exports = {
         src = _getSrc3.src,
         type = _getSrc3.type;
 
+    console.log(source);
     if (type === 'file') {
+      console.log(1111);
       return this._readFile(src, function (data) {
         _this4._crop(src, source, options, callback);
       });
@@ -286,7 +297,6 @@ module.exports = {
       ctx.translate(w / 2, h / 2);
       ctx.rotate(degree * Math.PI / 180);
       ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2);
-
       var mimeType = _this9._getImageType(source);
       var data = cvs.toDataURL(mimeType, 1);
       callback(data, w, h);
@@ -321,6 +331,9 @@ module.exports = {
       }
       src = imgSrc;
       type = 'element';
+    } else if (this._isVideoElement(source)) {
+      src = source;
+      type = 'video';
     } else if (this._isFileObject(source)) {
       src = source;
       type = 'file';
@@ -335,6 +348,9 @@ module.exports = {
   },
   _isImageElement: function _isImageElement(el) {
     return (typeof el === 'undefined' ? 'undefined' : _typeof(el)) === 'object' && el.tagName === 'IMG';
+  },
+  _isVideoElement: function _isVideoElement(el) {
+    return (typeof el === 'undefined' ? 'undefined' : _typeof(el)) === 'object' && el.tagName === 'VIDEO';
   },
   _getImageType: function _getImageType(source) {
     var _getSrc6 = this._getSrc(source),
