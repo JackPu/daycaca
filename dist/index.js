@@ -89,7 +89,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 var isNumber = function isNumber(num) {
   return typeof num === 'number';
 };
-var imageReg = /\.(png|jpeg|jpg|gif|bmp)/;
+var imageReg = /[./](png|jpeg|jpg|gif|bmp)/;
 
 var defaultConfig = {
   ratio: 1,
@@ -137,7 +137,7 @@ module.exports = {
       var ctx = cvs.getContext('2d');
       ctx.drawImage(video, 0, 0);
       var newImageData = cvs.toDataURL();
-      callback(newImageData);
+      callback(newImageData, cvs);
     }
     return this.init(src, callback);
   },
@@ -195,9 +195,7 @@ module.exports = {
         src = _getSrc3.src,
         type = _getSrc3.type;
 
-    console.log(source);
     if (type === 'file') {
-      console.log(1111);
       return this._readFile(src, function (data) {
         _this4._crop(src, source, options, callback);
       });
@@ -222,6 +220,7 @@ module.exports = {
         var cvs = _this5._getCanvas(w, h);
         var ctx = cvs.getContext('2d').drawImage(image, options.x, options.y, options.w, options.h, 0, 0, w, h);
         var mimeType = _this5._getImageType(source);
+        console.log(mimeType);
         var data = cvs.toDataURL(mimeType, options.compress / 100);
         callback(data);
       }

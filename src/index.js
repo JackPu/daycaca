@@ -1,7 +1,7 @@
 // a canvas lib to compress or crop images
 
 const isNumber = num => (typeof num === 'number');
-const imageReg = /\.(png|jpeg|jpg|gif|bmp)/;
+const imageReg = /[./](png|jpeg|jpg|gif|bmp)/;
 
 const defaultConfig = {
   ratio: 1,
@@ -42,7 +42,7 @@ module.exports = {
       const ctx = cvs.getContext('2d');
       ctx.drawImage(video, 0, 0);
       const newImageData = cvs.toDataURL();
-      callback(newImageData);
+      callback(newImageData, cvs);
     }
     return this.init(src, callback);
   },
@@ -88,9 +88,7 @@ module.exports = {
   */
   crop(source, options, callback) {
     const {src, type} = this._getSrc(source);
-    console.log(source)
     if (type === 'file') {
-      console.log(1111)
       return this._readFile(src, (data) => {
         this._crop(src, source, options, callback);
       })
