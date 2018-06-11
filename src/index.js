@@ -87,10 +87,10 @@ module.exports = {
   * crop image via canvas and generate data
   */
   crop(source, options, callback) {
-    const {src, type} = this._getSrc(source);
+    const { src, type } = this._getSrc(source);
     if (type === 'file') {
       return this._readFile(src, (data) => {
-        this._crop(src, source, options, callback);
+        this._crop(data, source, options, callback);
       })
     }
     this._crop(src, source, options, callback);
@@ -112,6 +112,10 @@ module.exports = {
         if (options.maxHeight && options.maxHeight < h) {
           h = options.maxHeight;
         }
+        if (options.fixedWidth && options.fixedHeight) {
+          w = options.fixedWidth;
+          h = options.fixedHeight;
+        }
         const cvs = this._getCanvas(w, h);
         const ctx = cvs.getContext('2d').drawImage(image, options.x, options.y, options.w, options.h, 0 , 0, w, h);
         const mimeType = this._getImageType(source);
@@ -122,10 +126,10 @@ module.exports = {
   },
 
   resize(source, ratio, callback) {
-    const {src, type} = this._getSrc(source);
+    const { src, type } = this._getSrc(source);
     if (type === 'file') {
       return this._readFile(src, (data) => {
-        this._resize(src, source, options, callback);
+        this._resize(data, source, options, callback);
       })
     }
     this._resize(src, source, options, callback);
@@ -152,7 +156,7 @@ module.exports = {
    * rotate image
    */
   rotate (source, degree, callback) {
-    const {src, type} = this._getSrc(source);
+    const { src, type } = this._getSrc(source);
     if (type === 'file') {
       return this._readFile(src, (data) => {
         this._rotate(src, source, degree, callback);

@@ -197,7 +197,7 @@ module.exports = {
 
     if (type === 'file') {
       return this._readFile(src, function (data) {
-        _this4._crop(src, source, options, callback);
+        _this4._crop(data, source, options, callback);
       });
     }
     this._crop(src, source, options, callback);
@@ -217,10 +217,13 @@ module.exports = {
         if (options.maxHeight && options.maxHeight < h) {
           h = options.maxHeight;
         }
+        if (options.fixedWidth && options.fixedHeight) {
+          w = options.fixedWidth;
+          h = options.fixedHeight;
+        }
         var cvs = _this5._getCanvas(w, h);
         var ctx = cvs.getContext('2d').drawImage(image, options.x, options.y, options.w, options.h, 0, 0, w, h);
         var mimeType = _this5._getImageType(source);
-        console.log(mimeType);
         var data = cvs.toDataURL(mimeType, options.compress / 100);
         callback(data);
       }
@@ -235,7 +238,7 @@ module.exports = {
 
     if (type === 'file') {
       return this._readFile(src, function (data) {
-        _this6._resize(src, source, options, callback);
+        _this6._resize(data, source, options, callback);
       });
     }
     this._resize(src, source, options, callback);
