@@ -53,7 +53,8 @@ daycaca.rotate(src, degress, (data, w, h) => {
 画像をbase64 code値に転換する。参考数elは画像のDOM節点やDOMのURLである。
 
 ``` js
-const img = document.querySelector('img')daycaca.base64(img, (data) => {
+const img = document.querySelector('img')
+daycaca.base64(img, (data) => {
   //... handle base64
 })
 ```
