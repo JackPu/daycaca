@@ -90,10 +90,10 @@ daycaca.compress(img, 0.5,(data) => {
 
 option {} 里面需要指定的参数:
 
-+ toCropImgX: 裁剪的区域距离图片的左边缘的距离
-+ toCropImgY: 裁剪的区域距离图片的上边缘的距离
-+ toCropImgW: 裁剪的区域的宽度
-+ toCropImgH: 裁剪的区域的高度
++ x: 裁剪的区域距离图片的左边缘的距离
++ y: 裁剪的区域距离图片的上边缘的距离
++ w: 裁剪的区域的宽度
++ h: 裁剪的区域的高度
 + ratio 缩放比例
 
 <img width="480" src="http://img1.vued.vanthink.cn/vued233e94bd60775c0999df05d17b4642a8.png" />
@@ -102,10 +102,10 @@ option {} 里面需要指定的参数:
 ``` js
 const img = document.querySelector('img')
 daycaca.reszie(img, {
-  toCropImgX: 10,
-  toCropImgY: 20,
-  toCropImgW: 100,
-  toCropImgH: 70
+  x: 10,
+  y: 20,
+  w: 100,
+  h: 70
 },(data) => {
   //... handle base64
 })
