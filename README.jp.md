@@ -20,94 +20,78 @@
 ### Npm
 
 ``` bash
-$  npm install daycaca -save
+$  npm install daycaca --save
 ```
 
-
-``` es6
-// es6
-import daycaca from 'daycaca';
-// src specify an image src (url or base64)
+``` js
+// es6import daycaca from 'daycaca';// src specify an image src (url or base64)
 daycaca.rotate(src, degress, (data, w, h) => {
   // your code here
 });
-
 ```
 
-### CDN
+### CDN （ブラウザーで直接使う）
 
-``` js
+``` html
 <script src="./dist/daycaca.js"></script>
-
 <script>
   // src specify an image src (url or base64)
   daycaca.rotate(src, degress, (data, w, h) => {
     // your code here
-  });
-</script>
+  });</script>
 ```
-
-
 
 ## API
 
-API `source` 々は以下の1つのタイプでなければなりません:
-
-+ an image url  (Pay attention to [CORS](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) settings)
-+ an IMG elment
-+ [a file object](https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications) Which use `input[type="file"]` value as source
+すべてのAPI source は以下の1つのタイプでなければなりません:
++ 画像url (URLを使う場合、クロスドメインの設置にお気を付けください。)
++ 画像のDOM節点
++ [type="file"]を使用する画像ファイルの対象值
 
 ### base64(source, callback)
 
-あなたのイメージを変換する `base64`.
+画像をbase64 code値に転換する。参考数elは画像のDOM節点やDOMのURLである。
 
 ``` js
-const img = document.querySelector('img')
-daycaca.base64(img, (data) => {
+const img = document.querySelector('img')daycaca.base64(img, (data) => {
   //... handle base64
 })
 ```
 
 ### compress(source, quailty, callback)
 
-あなたのイメージを圧縮する.
+画像を圧縮する場合、画質を圧縮し、画像のサイズを小さくする。
 
-+ PNG 表示可逆圧縮; `quality` うまくいかない。
++ PNGは無損失圧縮されるので、quality無効。
++ JPG/JPEG/BMP は損失圧縮される。
 
-+ JPG/JPEG/BMP 表示損失圧縮;
-
-`quality` (1~100). 100 表示同じままにする
-
+`quality` は圧縮後の画質を表す。Qualityの数値が大きいほど、画質が高いのである。
 
 ``` js
-const img = document.querySelector('img')
-daycaca.compress(img, 0.5,(data) => {
+const img = document.querySelector('img')daycaca.compress(img, 0.5,(data) => {
   //... handle base64
 })
 ```
 
 ### crop(source, option, callback)
 
-画像をトリミングする。
+画像をカットする。
 
-option {} :
+`option` {} では、指定する必要がある参考数値である:
 
-+ toCropImgX;
-+ toCropImgY;
-+ toCropImgW;
-+ toCropImgH;
-+ ratio: スケール比;
-
-<img width="480" src="http://img1.vued.vanthink.cn/vued233e94bd60775c0999df05d17b4642a8.png" />
-
++ `x`;はカットされたエリアが画像の左までの距離
++ `y`;はカットされたエリアが画像の上までの距離
++ `w`;はカットされたエリアの横幅
++ `h`;はカットされたエリアの高度
++ `ratio`: スケール比率;
 
 ``` js
 const img = document.querySelector('img')
 daycaca.reszie(img, {
-  toCropImgX: 10,
-  toCropImgY: 20,
-  toCropImgW: 100,
-  toCropImgH: 70
+  x: 10,
+  y: 20,
+  w: 100,
+  h: 70
 },(data) => {
   //... handle base64
 })
@@ -115,7 +99,7 @@ daycaca.reszie(img, {
 
 ### rotate(source, degree, callback)
 
-あなたのイメージを回転させる。
+画像を回転させる。
 
 ``` js
 const img = document.querySelector('img')
@@ -126,9 +110,9 @@ daycaca.rotate(img, 90,(data) => {
 
 ### reszie(source, ratio, callback)
 
-画像を拡大縮小する;
+画像を拡大、縮小させる;
 
-+ ratio (0~1): 画像のスケール比; 1 表示同じままにする
++ `ratio` (0~1)は画像のスケール比率である。1と設定する場合は、画像の大きさが変わらない。０以下の数値は設定できない。
 
 ``` js
 const img = document.querySelector('img')
@@ -137,11 +121,10 @@ daycaca.reszie(img, 0.5,(data) => {
 })
 ```
 
-## 貢献
+### コメント
 
-あなたの貢献と提案は大歓迎です 😄😄🌺🌺🎆🎆
+ご意見やご質問大歓迎です！
 
-## MIT License
 
 
 

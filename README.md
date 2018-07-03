@@ -139,6 +139,10 @@ daycaca.reszie(img, 0.5,(data) => {
 
 Your contributions and suggestions are welcome 😄😄🌺🌺🎆🎆
 
+## Contributors
+
++ @Annie Tanslations of Japanese documents;
+
 ## MIT License
 
 
