@@ -19,7 +19,7 @@ module.exports = {
   */
   init(src, callback) {
     const scrTypes = src.split(';');
-    const srcType = null;
+    let srcType = null;
     const image = this._createImage(src);
     if (scrTypes.length > 1) {
       srcType = scrTypes[0].replace('data:', '');
