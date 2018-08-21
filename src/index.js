@@ -18,12 +18,17 @@ module.exports = {
   * init image for reset size and rotation
   */
   init(src, callback) {
+    const scrTypes = src.split(';');
+    const srcType = null;
     const image = this._createImage(src);
+    if (scrTypes.length > 1) {
+      srcType = scrTypes[0].replace('data:', '');
+    }
     image.onload = () => {
       const cvs = this._getCanvas(image.naturalWidth, image.naturalHeight);
       const ctx = cvs.getContext('2d');
       ctx.drawImage(image, 0, 0);
-      const newImageData = cvs.toDataURL();
+      const newImageData = cvs.toDataURL(srcType);
       callback(newImageData);
     };
   },
