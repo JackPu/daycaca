@@ -9,7 +9,7 @@ const defaultConfig = {
 };
 
 module.exports = {
-  
+
   setConfig(config) {
     this._config = Object.assign(defaultConfig, config)
   },
@@ -34,7 +34,7 @@ module.exports = {
    * @param {Function} callback
    */
   base64(el, callback) {
-    const {src, type} = this._getSrc(el);
+    const { src, type } = this._getSrc(el);
     if (type === 'file') {
       return this._readFile(src, callback)
     }
@@ -48,7 +48,7 @@ module.exports = {
    * @param {Function} callback
    */
   compress(source, quality, callback) {
-    const {src, type} = this._getSrc(source);
+    const { src, type } = this._getSrc(source);
     if (type === 'file') {
       return this._readFile(src, (data) => {
         this._compress(src, source, quality, callback);
@@ -56,7 +56,7 @@ module.exports = {
     }
     this._compress(src, source, quality, callback);
   },
-  
+
   _compress(src, source, quality, callback) {
     this._loadImage(src, (image) => {
       const mimeType = this._getImageType(source);
@@ -67,7 +67,7 @@ module.exports = {
       callback(newImageData);
     })
   },
-  
+
   _readFile(file, callback) {
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -75,21 +75,21 @@ module.exports = {
       callback(data)
     }
     reader.readAsDataURL(file)
-  }, 
+  },
 
   /**
   * crop image via canvas and generate data
   */
   crop(source, options, callback) {
-    const {src, type} = this._getSrc(source);
+    const { src, type } = this._getSrc(source);
     if (type === 'file') {
-      return this._readFile(src, (data) => {
+      return this._readFile(src, () => {
         this._crop(src, source, options, callback);
-      })
+      });
     }
     this._crop(src, source, options, callback);
   },
-  
+
   _crop(src, source, options, callback) {
     this._loadImage(src, (image) => {
       // check crop options
@@ -107,20 +107,20 @@ module.exports = {
           h = options.maxHeight;
         }
         const cvs = this._getCanvas(w, h);
-        const ctx = cvs.getContext('2d').drawImage(image, options.x, options.y, options.w, options.h, 0 , 0, w, h);
+        const ctx = cvs.getContext('2d').drawImage(image, options.x, options.y, options.w, options.h, 0, 0, w, h);
         const mimeType = this._getImageType(source);
         const data = cvs.toDataURL(mimeType, options.compress / 100);
         callback(data);
       }
     });
   },
-  
+
   resize(source, ratio, callback) {
-    const {src, type} = this._getSrc(source);
+    const { src, type } = this._getSrc(source);
     if (type === 'file') {
-      return this._readFile(src, (data) => {
+      return this._readFile(src, () => {
         this._resize(src, source, options, callback);
-      })
+      });
     }
     this._resize(src, source, options, callback);
   },
@@ -134,19 +134,19 @@ module.exports = {
         const w = options.toCropImgW * options.imgChangeRatio;
         const h = options.toCropImgH * options.imgChangeRatio;
         const cvs = this._getCanvas(w, h);
-        const ctx = cvs.getContext('2d').drawImage(image, 0, 0, options.toCropImgW, options.toCropImgH, 0 , 0, w , h);
+        const ctx = cvs.getContext('2d').drawImage(image, 0, 0, options.toCropImgW, options.toCropImgH, 0, 0, w, h);
         const mimeType = this._getImageType(source);
         const data = cvs.toDataURL(mimeType, options.compress / 100);
         callback(data);
       }
     });
   },
-  
+
   /**
    * rotate image
    */
   rotate(source, degree, callback) {
-    const {src, type} = this._getSrc(source);
+    const { src, type } = this._getSrc(source);
     if (type === 'file') {
       return this._readFile(src, (data) => {
         this._rotate(src, source, degree, callback);
@@ -157,13 +157,13 @@ module.exports = {
     }
     this._rotate(src, source, degree, callback);
   },
-  
+
   _rotate(src, source, degree, callback) {
     this._loadImage(src, (image) => {
       let w = image.naturalWidth;
       let h = image.naturalHeight;
       degree %= 360;
-      if(degree == 90 || degree == 270) {
+      if (degree == 90 || degree == 270) {
         w = image.naturalHeight;
         h = image.naturalWidth;
       }
@@ -174,8 +174,8 @@ module.exports = {
       ctx.fillRect(0, 0, w, h);
       ctx.translate(w / 2, h / 2);
       ctx.rotate(degree * Math.PI / 180);
-      ctx.drawImage(image, -image.naturalWidth/2, -image.naturalHeight/2);
-      
+      ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2);
+
       const mimeType = this._getImageType(source);
       const data = cvs.toDataURL(mimeType, 1);
       callback(data, w, h);
@@ -223,17 +223,17 @@ module.exports = {
       type
     };
   },
-    
+
   _isFileObject(file) {
     return (typeof file === 'object' && file.type && file.size > 0);
   },
-    
+
   _isImageElement(el) {
     return (typeof el === 'object' && el.tagName === 'IMG');
   },
-  
+
   _getImageType(source) {
-    const {src, type} = this._getSrc(source);
+    const { src, type } = this._getSrc(source);
     let mimeType = 'image/jpeg';
     if (type === 'file') {
       const outputType = str.match(/(image\/[\w]+)\.*/)[0];
@@ -246,7 +246,7 @@ module.exports = {
         mimeType = 'image/' + arr[1]
       }
     }
-    
+
     return mimeType;
   },
 
