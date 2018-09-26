@@ -1,15 +1,16 @@
 // a canvas lib to compress or crop images
 
 const isNumber = num => (typeof num === 'number');
-const imageReg = /\.(png|jpeg|jpg|gif|bmp)/;
+const imageReg = /[./](png|jpeg|jpg|gif|bmp)/;
 
 const defaultConfig = {
   ratio: 1,
+  compress: 80,
   enableWebWorker: false,
 };
 
-module.exports = {
 
+module.exports = {
   setConfig(config) {
     this._config = Object.assign(defaultConfig, config)
   },
@@ -36,7 +37,14 @@ module.exports = {
   base64(el, callback) {
     const { src, type } = this._getSrc(el);
     if (type === 'file') {
-      return this._readFile(src, callback)
+      return this._readFile(src, callback);
+    } else if (type === 'video') {
+      const video = el;
+      const cvs = this._getCanvas(video.videoWidth, video.videoHeight);
+      const ctx = cvs.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+      const newImageData = cvs.toDataURL();
+      callback(newImageData, cvs);
     }
     return this.init(src, callback);
   },
@@ -50,8 +58,8 @@ module.exports = {
   compress(source, quality, callback) {
     const { src, type } = this._getSrc(source);
     if (type === 'file') {
-      return this._readFile(src, () => {
-        this._compress(src, source, quality, callback);
+      return this._readFile(src, (data) => {
+        this._compress(data, source, quality, callback);
       });
     }
     this._compress(src, source, quality, callback);
@@ -74,9 +82,9 @@ module.exports = {
   crop(source, options, callback) {
     const { src, type } = this._getSrc(source);
     if (type === 'file') {
-      return this._readFile(src, () => {
-        this._crop(src, source, options, callback);
-      });
+      return this._readFile(src, (data) => {
+        this._crop(data, source, options, callback);
+      })
     }
     this._crop(src, source, options, callback);
   },
@@ -96,6 +104,10 @@ module.exports = {
         if (options.maxHeight && options.maxHeight < h) {
           h = options.maxHeight;
         }
+        if (options.fixedWidth && options.fixedHeight) {
+          w = options.fixedWidth;
+          h = options.fixedHeight;
+        }
         const cvs = this._getCanvas(w, h);
         cvs.getContext('2d').drawImage(image, options.x, options.y, options.w, options.h, 0, 0, w, h);
         const mimeType = this._getImageType(source);
@@ -108,19 +120,17 @@ module.exports = {
   resize(source, ratio, callback) {
     const { src, type } = this._getSrc(source);
     let options = {};
-    if (typeof ratio === 'number') {
-      ratio *= 1;
+    if (typeof ratio === 'number' || typeof ratio === 'string') {
       options = {
         ratio,
-        compress: 80,
+        compress: defaultConfig.compress,
       };
-    } else if (typeof ratio === 'object') {
+    } else if (typeof ration === 'object') {
       options = ratio;
     }
-
     if (type === 'file') {
-      return this._readFile(src, () => {
-        this._resize(src, source, options, callback);
+      return this._readFile(src, (data) => {
+        this._resize(data, source, options, callback);
       });
     }
     this._resize(src, source, options, callback);
@@ -155,7 +165,6 @@ module.exports = {
     }
     this._rotate(src, source, degree, callback);
   },
-
   _rotate(src, source, degree, callback) {
     this._loadImage(src, (image) => {
       let w = image.naturalWidth;
@@ -173,7 +182,6 @@ module.exports = {
       ctx.translate(w / 2, h / 2);
       ctx.rotate((degree * Math.PI) / 180);
       ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2);
-
       const mimeType = this._getImageType(source);
       const data = cvs.toDataURL(mimeType, 1);
       callback(data, w, h);
@@ -217,17 +225,20 @@ module.exports = {
     if (this._isImageElement(source)) {
       const imgSrc = source.src;
       if (!imgSrc) {
-        return console.error('Element must hava src');
+        throw new Error('Element must hava src');
       }
       src = imgSrc;
-      type = 'element'
+      type = 'element';
+    } else if (this._isVideoElement(source)) {
+      src = source;
+      type = 'video';
     } else if (this._isFileObject(source)) {
       src = source;
       type = 'file';
     }
     return {
       src,
-      type
+      type,
     };
   },
 
@@ -239,11 +250,16 @@ module.exports = {
     return (typeof el === 'object' && el.tagName === 'IMG');
   },
 
+  _isVideoElement(el) {
+    return (typeof el === 'object' && el.tagName === 'VIDEO');
+  },
+
   _getImageType(source) {
     const { src, type } = this._getSrc(source);
     let mimeType = 'image/jpeg';
     if (type === 'file') {
-      const outputType = str.match(/(image\/[\w]+)\.*/)[0];
+      const fileType = source.type;
+      const outputType = fileType.match(/(image\/[\w]+)\.*/)[0];
       if (typeof outputType !== 'undefined') {
         mimeType = outputType;
       }
@@ -253,7 +269,6 @@ module.exports = {
         mimeType = `image/${arr[1]}`;
       }
     }
-
     return mimeType;
   },
 

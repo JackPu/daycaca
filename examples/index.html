@@ -99,13 +99,13 @@
         <button class="btn btn-primary js-rotate">Rotate</button>
       </p>
       <h3>Resize</h3>
-      <img width="200" src="./images/city.jpg" class="js-rotate-el" />
+      <img width="200" src="./images/city.jpg" class="js-resize-el" />
       <p>before</p>
-      <img src="" style="display:none;background:#eee;" class="ro js-crop-target" />
-      <p class="ro" style="display:none;">after</p>
+      <img src="" style="display:none;background:#eee;" class="re js-resize-target" />
+      <p class="re" style="display:none;">after</p>
       <pre><code>daycaca.resize(el, 2, () => {
       //...
-      });</code></pre>
+});</code></pre>
       <p class="form-group">
         <button class="btn btn-primary js-resize">Resize</button>
       </p>
@@ -162,6 +162,15 @@
         daycaca.rotate(el, 90, function (data) {
           $('.js-crop-target').attr('src', data)
           $('.ro').show();
+        });
+      });
+
+      $('.js-resize').on('click', function () {
+        var el = document.querySelector('.js-resize-el')
+        daycaca.resize(el, 2, function (data) {
+          console.log(data);
+          $('.js-resize-target').attr('src', data)
+          $('.re').show();
         });
       });
 

@@ -120,7 +120,6 @@ pre{
 }
 @media all and (max-width:960px) {
   h2,.doc,.img-wrap{
-      width:95%;
       flex-wrap: wrap;
   }
   .img-wrap .item{

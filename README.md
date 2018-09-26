@@ -1,6 +1,6 @@
 # daycaca
 
-[![CircleCI](https://circleci.com/gh/JackPu/daycaca/tree/dev.svg?style=svg)](https://circleci.com/gh/JackPu/daycaca/tree/dev)
+[![CircleCI](https://circleci.com/gh/JackPu/daycaca.svg?style=shield)](https://circleci.com/gh/JackPu/daycaca)
 [![npm](https://img.shields.io/npm/v/daycaca.svg?maxAge=2592000)]()
 
 
@@ -95,6 +95,8 @@ option {} :
 + w: The width of crop area;
 + h: The height of crop area
 + ratio: the scale ration of the image
++ fixedWidth: get the image with fixed width
++ fixedHieght: get the image with fixed height
 
 <img width="480" src="http://img1.vued.vanthink.cn/vued233e94bd60775c0999df05d17b4642a8.png" />
 
