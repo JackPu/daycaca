@@ -50,9 +50,9 @@ module.exports = {
   compress(source, quality, callback) {
     const { src, type } = this._getSrc(source);
     if (type === 'file') {
-      return this._readFile(src, (data) => {
+      return this._readFile(src, () => {
         this._compress(src, source, quality, callback);
-      })
+      });
     }
     this._compress(src, source, quality, callback);
   },
@@ -65,16 +65,7 @@ module.exports = {
       ctx.drawImage(image, 0, 0);
       const newImageData = cvs.toDataURL(mimeType, quality / 100);
       callback(newImageData);
-    })
-  },
-
-  _readFile(file, callback) {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const data = event.target.result;
-      callback(data)
-    }
-    reader.readAsDataURL(file)
+    });
   },
 
   /**
@@ -97,8 +88,7 @@ module.exports = {
         isNumber(options.y) &&
         options.w > 0 &&
         options.h > 0) {
-        let w = options.w;
-        let h = options.h;
+        let { w, h } = options;
         if (options.maxWidth && options.maxWidth < w) {
           w = options.maxWidth;
           h = (options.h * w) / options.w;
@@ -107,7 +97,7 @@ module.exports = {
           h = options.maxHeight;
         }
         const cvs = this._getCanvas(w, h);
-        const ctx = cvs.getContext('2d').drawImage(image, options.x, options.y, options.w, options.h, 0, 0, w, h);
+        cvs.getContext('2d').drawImage(image, options.x, options.y, options.w, options.h, 0, 0, w, h);
         const mimeType = this._getImageType(source);
         const data = cvs.toDataURL(mimeType, options.compress / 100);
         callback(data);
@@ -117,6 +107,17 @@ module.exports = {
 
   resize(source, ratio, callback) {
     const { src, type } = this._getSrc(source);
+    let options = {};
+    if (typeof ratio === 'number') {
+      ratio *= 1;
+      options = {
+        ratio,
+        compress: 80,
+      };
+    } else if (typeof ratio === 'object') {
+      options = ratio;
+    }
+
     if (type === 'file') {
       return this._readFile(src, () => {
         this._resize(src, source, options, callback);
@@ -127,14 +128,11 @@ module.exports = {
 
   _resize(src, source, options, callback) {
     this._loadImage(src, (image) => {
-      if (isNumber(options.toCropImgX) &&
-        isNumber(options.toCropImgY) &&
-        options.toCropImgW > 0 &&
-        options.toCropImgH > 0) {
-        const w = options.toCropImgW * options.imgChangeRatio;
-        const h = options.toCropImgH * options.imgChangeRatio;
+      if (options.ratio > 0) {
+        const w = Math.floor(image.naturalWidth * options.ratio);
+        const h = Math.floor(image.naturalHeight * options.ratio);
         const cvs = this._getCanvas(w, h);
-        const ctx = cvs.getContext('2d').drawImage(image, 0, 0, options.toCropImgW, options.toCropImgH, 0, 0, w, h);
+        cvs.getContext('2d').drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, w, h);
         const mimeType = this._getImageType(source);
         const data = cvs.toDataURL(mimeType, options.compress / 100);
         callback(data);
@@ -148,9 +146,9 @@ module.exports = {
   rotate(source, degree, callback) {
     const { src, type } = this._getSrc(source);
     if (type === 'file') {
-      return this._readFile(src, (data) => {
+      return this._readFile(src, () => {
         this._rotate(src, source, degree, callback);
-      })
+      });
     }
     if (degree % 360 === 0) {
       return callback(src);
@@ -163,7 +161,7 @@ module.exports = {
       let w = image.naturalWidth;
       let h = image.naturalHeight;
       degree %= 360;
-      if (degree == 90 || degree == 270) {
+      if (degree === 90 || degree === 270) {
         w = image.naturalHeight;
         h = image.naturalWidth;
       }
@@ -173,7 +171,7 @@ module.exports = {
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, w, h);
       ctx.translate(w / 2, h / 2);
-      ctx.rotate(degree * Math.PI / 180);
+      ctx.rotate((degree * Math.PI) / 180);
       ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2);
 
       const mimeType = this._getImageType(source);
@@ -189,6 +187,15 @@ module.exports = {
     image.onload = () => {
       callback(image);
     };
+  },
+
+  _readFile(file, callback) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const data = event.target.result;
+      callback(data);
+    };
+    reader.readAsDataURL(file);
   },
 
   _getCanvas(width, height) {
@@ -243,7 +250,7 @@ module.exports = {
     } else {
       const arr = imageReg.exec(src);
       if (arr && arr[1]) {
-        mimeType = 'image/' + arr[1]
+        mimeType = `image/${arr[1]}`;
       }
     }
 

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <title>Daycaca-A pure JavaScript library to handle image via canvas</title>
   <meta charset="utf-8" />
@@ -27,7 +28,7 @@
           <li><a href="#examples">Examples</a></li>
           <li><a href="https://github.com/Vanthink-UED/vanspeak">Github</a></li>
         </ul>
-        
+
       </div>
     </nav>
     <div class="doc-hd">
@@ -46,7 +47,7 @@
       <p>In your JS File</p>
       <pre><code>daycaca.setConfig({});</code></pre>
       <p><a href="https://github.com/JackPu/daycaca">view more details</a></p>
-      <br/>
+      <br />
 
     </div>
     <h2>Examples</h2>
@@ -60,9 +61,9 @@
       </p>
       <p><code id="base64-code"></code></p>
       <h3>compress</h3>
-      <img src="./images/test-compress.jpg" class="js-compress-el"/>
+      <img src="./images/test-compress.jpg" class="js-compress-el" />
       <p>before</p>
-      <img src="" style="display:none;width:600px;height:333px;background:#eee;" class="cp js-compress-target"/>
+      <img src="" style="display:none;width:600px;height:333px;background:#eee;" class="cp js-compress-target" />
       <p class="cp" style="display:none;">after</p>
       <pre><code>daycaca.base64('./images/test-compress.jpg', 10, () => {
   //...
@@ -71,9 +72,9 @@
         <button class="btn btn-primary js-compress">Compress</button>
       </p>
       <h3>Crop</h3>
-      <img src="./images/test-crop.jpg" class="js-crop-el"/>
+      <img src="./images/test-crop.jpg" class="js-crop-el" />
       <p>裁剪前</p>
-      <img src="" style="display:none;width:600px;height:333px;background:#eee;" class="cr js-crop-target"/>
+      <img src="" style="display:none;width:600px;height:333px;background:#eee;" class="cr js-crop-target" />
       <p class="cr" style="display:none;">裁剪后</p>
       <pre><code>daycaca.crop('./images/test-compress.jpg', {
   x: 20,
@@ -84,26 +85,37 @@
 //...
 });</code></pre>
       <p class="form-group">
-        <button class="btn btn-primary js-crop" >Crop</button>
+        <button class="btn btn-primary js-crop">Crop</button>
       </p>
       <h3>Rotate</h3>
-      <img src="./images/daycaca.png" class="js-rotate-el"/>
+      <img src="./images/daycaca.png" class="js-rotate-el" />
       <p>before</p>
-      <img src="" style="display:none;background:#eee;" class="ro js-crop-target"/>
+      <img src="" style="display:none;background:#eee;" class="ro js-crop-target" />
       <p class="ro" style="display:none;">after</p>
       <pre><code>daycaca.rotate(el, 90, () => {
 //...
 });</code></pre>
       <p class="form-group">
-        <button class="btn btn-primary js-rotate" >Rotate</button>
+        <button class="btn btn-primary js-rotate">Rotate</button>
       </p>
-      <br/>
-      <br/>
+      <h3>Resize</h3>
+      <img width="200" src="./images/city.jpg" class="js-rotate-el" />
+      <p>before</p>
+      <img src="" style="display:none;background:#eee;" class="ro js-crop-target" />
+      <p class="ro" style="display:none;">after</p>
+      <pre><code>daycaca.resize(el, 2, () => {
+      //...
+      });</code></pre>
+      <p class="form-group">
+        <button class="btn btn-primary js-resize">Resize</button>
+      </p>
+      <br />
+      <br />
       <!-- Go to www.addthis.com/dashboard to customize your tools -->
       <div class="addthis_sharing_toolbox"></div>
     </div>
     <div class="doc-ft">
-      The Project Made ❤️ by <a href="http://me.jackpu.com/">Jack Pu</a>
+      The Project Made ❤️ by <a href="https://me.jackpu.com/">Jack Pu</a>
     </div>
 
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-55d88bec2ab91030" async="async"></script>
@@ -121,15 +133,15 @@
     $(function () {
 
       $('.js-base64').on('click', function () {
-        daycaca.base64('./images/test-base64.png', function(data) {
+        daycaca.base64('./images/test-base64.png', function (data) {
           $('#base64-code').text(data);
         })
       });
       $('.js-compress').on('click', function () {
         var el = document.querySelector('.js-compress-el')
-        daycaca.compress(el, 10, function(data) {
-           $('.js-compress-target').attr('src', data)               
-           $('.cp').show();              
+        daycaca.compress(el, 10, function (data) {
+          $('.js-compress-target').attr('src', data)
+          $('.cp').show();
         });
       });
       $('.js-crop').on('click', function () {
@@ -139,17 +151,17 @@
           y: 100,
           w: 600,
           h: 300
-        }, function(data) {
-          $('.js-crop-target').attr('src', data)               
-          $('.cr').show();  
+        }, function (data) {
+          $('.js-crop-target').attr('src', data)
+          $('.cr').show();
         });
       });
-      
+
       $('.js-rotate').on('click', function () {
         var el = document.querySelector('.js-rotate-el')
-        daycaca.rotate(el, 90, function(data) {
-          $('.js-crop-target').attr('src', data)               
-          $('.ro').show();  
+        daycaca.rotate(el, 90, function (data) {
+          $('.js-crop-target').attr('src', data)
+          $('.ro').show();
         });
       });
 
