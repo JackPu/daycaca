@@ -1,6 +1,6 @@
 # daycaca
 
-[![CircleCI](https://circleci.com/gh/JackPu/daycaca/tree/dev.svg?style=svg)](https://circleci.com/gh/JackPu/daycaca/tree/dev)
+[![CircleCI](https://circleci.com/gh/JackPu/daycaca.svg?style=shield)](https://circleci.com/gh/JackPu/daycaca)
 [![npm](https://img.shields.io/npm/v/daycaca.svg?maxAge=2592000)](https://www.npmjs.com/package/daycaca)
 
 

@@ -14,10 +14,15 @@ module.exports = {
         test: /\.js$/,
         use: [{
           loader: 'babel-loader',
+          options: {
+            presets: 'env',
+            plugins: ['transform-object-assign']
+          },
         }],
         exclude: /node_modules/,
       },
     ],
   },
-  plugins: [],
+  plugins: [
+  ],
 };
