@@ -167,7 +167,10 @@
 
       $('.js-resize').on('click', function () {
         var el = document.querySelector('.js-resize-el')
-        daycaca.resize(el, 2, function (data) {
+        daycaca.resize(el, {
+          width: 100,
+          height: 100,
+        }, function (data) {
           console.log(data);
           $('.js-resize-target').attr('src', data)
           $('.re').show();

@@ -130,7 +130,8 @@ module.exports = {
         ratio,
         compress: defaultConfig.compress,
       };
-    } else if (typeof ration === 'object') {
+    }
+    if (typeof ratio === 'object') {
       options = ratio;
     }
     if (type === 'file') {
@@ -143,15 +144,20 @@ module.exports = {
 
   _resize(src, source, options, callback) {
     this._loadImage(src, (image) => {
+      let w = image.naturalWidth;
+      let h = image.naturalHeight;
       if (options.ratio > 0) {
-        const w = Math.floor(image.naturalWidth * options.ratio);
-        const h = Math.floor(image.naturalHeight * options.ratio);
-        const cvs = this._getCanvas(w, h);
-        cvs.getContext('2d').drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, w, h);
-        const mimeType = this._getImageType(source);
-        const data = cvs.toDataURL(mimeType, options.compress / 100);
-        callback(data);
+        w = Math.floor(image.naturalWidth * options.ratio);
+        h = Math.floor(image.naturalHeight * options.ratio);
+      } else if (typeof options.width === 'number' && typeof options.height === 'number') {
+        w = Math.floor(options.width);
+        h = Math.floor(options.height);
       }
+      const cvs = this._getCanvas(w, h);
+      cvs.getContext('2d').drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, w, h);
+      const mimeType = this._getImageType(source);
+      const data = cvs.toDataURL(mimeType, options.compress / 100);
+      callback(data);
     });
   },
 
@@ -170,6 +176,7 @@ module.exports = {
     }
     this._rotate(src, source, degree, callback);
   },
+
   _rotate(src, source, degree, callback) {
     this._loadImage(src, (image) => {
       let w = image.naturalWidth;

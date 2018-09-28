@@ -93,6 +93,7 @@ var imageReg = /[./](png|jpeg|jpg|gif|bmp)/;
 
 var defaultConfig = {
   ratio: 1,
+  compress: 80,
   enableWebWorker: false
 };
 
@@ -108,12 +109,17 @@ module.exports = {
   init: function init(src, callback) {
     var _this = this;
 
+    var scrTypes = src.split(';');
+    var srcType = null;
     var image = this._createImage(src);
+    if (scrTypes.length > 1) {
+      srcType = scrTypes[0].replace('data:', '');
+    }
     image.onload = function () {
       var cvs = _this._getCanvas(image.naturalWidth, image.naturalHeight);
       var ctx = cvs.getContext('2d');
       ctx.drawImage(image, 0, 0);
-      var newImageData = cvs.toDataURL();
+      var newImageData = cvs.toDataURL(srcType);
       callback(newImageData);
     };
   },
@@ -175,14 +181,6 @@ module.exports = {
       callback(newImageData);
     });
   },
-  _readFile: function _readFile(file, callback) {
-    var reader = new FileReader();
-    reader.onload = function (event) {
-      var data = event.target.result;
-      callback(data);
-    };
-    reader.readAsDataURL(file);
-  },
 
 
   /**
@@ -208,8 +206,9 @@ module.exports = {
     this._loadImage(src, function (image) {
       // check crop options
       if (isNumber(options.x) && isNumber(options.y) && options.w > 0 && options.h > 0) {
-        var w = options.w;
-        var h = options.h;
+        var w = options.w,
+            h = options.h;
+
         if (options.maxWidth && options.maxWidth < w) {
           w = options.maxWidth;
           h = options.h * w / options.w;
@@ -222,7 +221,7 @@ module.exports = {
           h = options.fixedHeight;
         }
         var cvs = _this5._getCanvas(w, h);
-        var ctx = cvs.getContext('2d').drawImage(image, options.x, options.y, options.w, options.h, 0, 0, w, h);
+        cvs.getContext('2d').drawImage(image, options.x, options.y, options.w, options.h, 0, 0, w, h);
         var mimeType = _this5._getImageType(source);
         var data = cvs.toDataURL(mimeType, options.compress / 100);
         callback(data);
@@ -236,6 +235,16 @@ module.exports = {
         src = _getSrc4.src,
         type = _getSrc4.type;
 
+    var options = {};
+    if (typeof ratio === 'number' || typeof ratio === 'string') {
+      options = {
+        ratio: ratio,
+        compress: defaultConfig.compress
+      };
+    }
+    if ((typeof ratio === 'undefined' ? 'undefined' : _typeof(ratio)) === 'object') {
+      options = ratio;
+    }
     if (type === 'file') {
       return this._readFile(src, function (data) {
         _this6._resize(data, source, options, callback);
@@ -247,15 +256,20 @@ module.exports = {
     var _this7 = this;
 
     this._loadImage(src, function (image) {
-      if (isNumber(options.toCropImgX) && isNumber(options.toCropImgY) && options.toCropImgW > 0 && options.toCropImgH > 0) {
-        var w = options.toCropImgW * options.imgChangeRatio;
-        var h = options.toCropImgH * options.imgChangeRatio;
-        var cvs = _this7._getCanvas(w, h);
-        var ctx = cvs.getContext('2d').drawImage(image, 0, 0, options.toCropImgW, options.toCropImgH, 0, 0, w, h);
-        var mimeType = _this7._getImageType(source);
-        var data = cvs.toDataURL(mimeType, options.compress / 100);
-        callback(data);
+      var w = image.naturalWidth;
+      var h = image.naturalHeight;
+      if (options.ratio > 0) {
+        w = Math.floor(image.naturalWidth * options.ratio);
+        h = Math.floor(image.naturalHeight * options.ratio);
+      } else if (typeof options.width === 'number' && typeof options.height === 'number') {
+        w = Math.floor(options.width);
+        h = Math.floor(options.height);
       }
+      var cvs = _this7._getCanvas(w, h);
+      cvs.getContext('2d').drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, w, h);
+      var mimeType = _this7._getImageType(source);
+      var data = cvs.toDataURL(mimeType, options.compress / 100);
+      callback(data);
     });
   },
 
@@ -271,7 +285,7 @@ module.exports = {
         type = _getSrc5.type;
 
     if (type === 'file') {
-      return this._readFile(src, function (data) {
+      return this._readFile(src, function () {
         _this8._rotate(src, source, degree, callback);
       });
     }
@@ -287,7 +301,7 @@ module.exports = {
       var w = image.naturalWidth;
       var h = image.naturalHeight;
       degree %= 360;
-      if (degree == 90 || degree == 270) {
+      if (degree === 90 || degree === 270) {
         w = image.naturalHeight;
         h = image.naturalWidth;
       }
@@ -312,6 +326,14 @@ module.exports = {
       callback(image);
     };
   },
+  _readFile: function _readFile(file, callback) {
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      var data = event.target.result;
+      callback(data);
+    };
+    reader.readAsDataURL(file);
+  },
   _getCanvas: function _getCanvas(width, height) {
     var canvas = document.createElement('canvas');
     canvas.width = width;
@@ -329,7 +351,7 @@ module.exports = {
     if (this._isImageElement(source)) {
       var imgSrc = source.src;
       if (!imgSrc) {
-        return console.error('Element must hava src');
+        throw new Error('Element must hava src');
       }
       src = imgSrc;
       type = 'element';
