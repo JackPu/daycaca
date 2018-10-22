@@ -1,6 +1,9 @@
 # daycaca
 
 [![CircleCI](https://circleci.com/gh/JackPu/daycaca.svg?style=shield)](https://circleci.com/gh/JackPu/daycaca)
+
+[![prs wlecone](<img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" height="20px">)
+
 [![npm](https://img.shields.io/npm/v/daycaca.svg?maxAge=2592000)]()
 
 
