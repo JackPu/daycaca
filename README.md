@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/JackPu/daycaca.svg?style=shield)](https://circleci.com/gh/JackPu/daycaca)
 
-[![prs wlecome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
+[![prs wlecome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)]()
 
 [![npm](https://img.shields.io/npm/v/daycaca.svg?maxAge=2592000)]()
 
